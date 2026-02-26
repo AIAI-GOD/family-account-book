@@ -98,7 +98,7 @@
             background: #6a8d6a;
         }
 
-        /* 筛选区域 */
+        /* 筛选区域 - 新增日历选择器样式 */
         .filter-section {
             margin-bottom: 25px;
             padding: 15px;
@@ -108,27 +108,56 @@
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
-            align-items: center;
+            align-items: flex-start;
             border: 1px solid #e9e6e1;
         }
         .filter-section label {
             font-weight: 500;
             color: #5c5c59;
             flex-shrink: 0;
+            margin-top: 5px;
         }
-        .filter-section select, .filter-section input {
+        .filter-section select {
             padding: 10px 12px;
             border: 1px solid #e9e6e1;
             border-radius: 8px;
-            flex: 1;
-            min-width: 150px;
+            flex-shrink: 0;
+            min-width: 120px;
             transition: border 0.3s ease;
         }
-        .filter-section select:focus, .filter-section input:focus {
+        .filter-section select:focus {
             border-color: #c87065;
             outline: none;
         }
-        .filter-section button {
+        /* 日历选择器容器 */
+        .calendar-picker {
+            flex: 1;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            margin-top: 5px;
+        }
+        /* 日期/月份/年份按钮 */
+        .calendar-btn {
+            padding: 10px 0;
+            border: 1px solid #e9e6e1;
+            border-radius: 8px;
+            background: #f8f6f3;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+        }
+        .calendar-btn:hover {
+            background: #f0ece7;
+            border-color: #d9d6d0;
+        }
+        .calendar-btn.active {
+            background: #c87065;
+            color: white !important;
+            border-color: #c87065;
+        }
+        .filter-section .query-btn {
             background: #c87065;
             color: white !important;
             border: none;
@@ -137,8 +166,9 @@
             cursor: pointer;
             transition: background 0.3s ease;
             flex-shrink: 0;
+            margin-top: 5px;
         }
-        .filter-section button:hover {
+        .filter-section .query-btn:hover {
             background: #b46056;
         }
 
@@ -273,6 +303,82 @@
             color: #b46056;
         }
 
+        /* 自定义删除确认弹窗 */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        .modal-overlay.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        .modal-box {
+            background: #ffffff;
+            border-radius: 16px;
+            padding: 30px;
+            width: 90%;
+            max-width: 400px;
+            box-shadow: 0 8px 24px rgba(150, 140, 130, 0.15);
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+        .modal-overlay.show .modal-box {
+            transform: translateY(0);
+        }
+        .modal-title {
+            font-size: 18px;
+            font-weight: 500;
+            color: #4a4a48;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .modal-content {
+            font-size: 14px;
+            color: #5c5c59;
+            margin-bottom: 25px;
+            text-align: center;
+            line-height: 1.6;
+        }
+        .modal-btns {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+        .modal-btn {
+            padding: 10px 25px;
+            border-radius: 10px;
+            border: none;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+        .modal-btn.cancel {
+            background: #f8f6f3;
+            color: #5c5c59;
+        }
+        .modal-btn.cancel:hover {
+            background: #f0ece7;
+        }
+        .modal-btn.confirm {
+            background: #c87065;
+            color: white !important;
+        }
+        .modal-btn.confirm:hover {
+            background: #b46056;
+        }
+
         /* 响应式适配 */
         @media (max-width: 768px) {
             body {
@@ -295,6 +401,12 @@
                 flex-direction: column;
                 gap: 5px;
                 align-items: flex-start;
+            }
+            .calendar-picker {
+                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            }
+            .modal-box {
+                padding: 20px;
             }
         }
     </style>
@@ -345,23 +457,26 @@
             </div>
         </div>
 
-        <!-- 筛选区域 -->
+        <!-- 筛选区域 - 重构为日历选择器 -->
         <div class="filter-section">
             <label>查看维度：</label>
-            <select id="viewDimension" onchange="changeFilterPlaceholder()">
+            <select id="viewDimension" onchange="renderCalendarPicker()">
                 <option value="day">按日查看</option>
                 <option value="month">按月查看</option>
                 <option value="year">按年查看</option>
             </select>
-            <input type="text" id="filterDate" placeholder="YYYY-MM-DD" value="">
-            <button id="filterBtn">🔍 查询</button>
+            <!-- 日历选择器容器 -->
+            <div class="calendar-picker" id="calendarPicker">
+                <!-- 动态生成日期/月份/年份按钮 -->
+            </div>
+            <button class="query-btn" id="filterBtn">🔍 查询</button>
         </div>
 
         <!-- 统计区域 -->
         <div class="stats-section">
             <div class="stats-title" id="statsTitle">当日统计（默认今日）</div>
             
-            <!-- 汇总数据 - 新增「家庭总支出」 -->
+            <!-- 汇总数据 - 家庭总支出 -->
             <div class="stats-summary">
                 <div class="stats-item">
                     <div class="label">丈夫支出</div>
@@ -423,6 +538,20 @@
         </div>
     </div>
 
+    <!-- 自定义删除确认弹窗 -->
+    <div class="modal-overlay" id="deleteModal">
+        <div class="modal-box">
+            <div class="modal-title">⚠️ 确认删除</div>
+            <div class="modal-content">
+                你确定要删除这条记账记录吗？<br>删除后数据将<strong>无法恢复</strong>，请谨慎操作！
+            </div>
+            <div class="modal-btns">
+                <button class="modal-btn cancel" onclick="hideDeleteModal()">取消</button>
+                <button class="modal-btn confirm" onclick="confirmDeleteRecord()">确认删除</button>
+            </div>
+        </div>
+    </div>
+
     <script>
         // 定义多级分类数据
         const categoryData = {
@@ -430,17 +559,20 @@
             收入: ['薪资', '兼职', '理财', '礼金', '其他']
         };
 
+        // 全局变量：存储当前选中的日期/月份/年份、待删除的记录ID
+        let currentSelectValue = '';
+        let waitDeleteRecordId = null;
+
         // 页面初始化
         document.addEventListener('DOMContentLoaded', function() {
             // 设置默认日期为今天
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('dateInput').value = today;
-            document.getElementById('filterDate').value = today;
             
             // 初始化分类选项
             changeCategoryOptions();
-            // 初始化筛选框提示文字
-            changeFilterPlaceholder();
+            // 初始化日历选择器
+            renderCalendarPicker();
             // 加载本地数据
             loadRecords();
             // 初始化统计
@@ -468,40 +600,120 @@
             });
         }
 
-        // 2. 切换查看维度时，更新筛选框提示
-        function changeFilterPlaceholder() {
+        // 2. 渲染日历选择器（核心：日/月/年维度切换）
+        function renderCalendarPicker() {
             const dimension = document.getElementById('viewDimension').value;
-            const filterDateInput = document.getElementById('filterDate');
-            const statsTitle = document.getElementById('statsTitle');
+            const calendarPicker = document.getElementById('calendarPicker');
+            calendarPicker.innerHTML = '';
             const today = new Date();
-
+            
+            // 更新统计标题
+            const statsTitle = document.getElementById('statsTitle');
+            
             if (dimension === 'day') {
-                filterDateInput.placeholder = 'YYYY-MM-DD';
-                filterDateInput.value = today.toISOString().split('T')[0];
-                statsTitle.textContent = '📅 当日统计（默认今日）';
+                // 日维度：生成当月所有天数
+                const year = today.getFullYear();
+                const month = today.getMonth();
+                // 获取当月第一天和最后一天
+                const firstDay = new Date(year, month, 1);
+                const lastDay = new Date(year, month + 1, 0);
+                const totalDays = lastDay.getDate();
+                
+                // 默认选中今天
+                const defaultDay = today.getDate();
+                currentSelectValue = `${year}-${String(month + 1).padStart(2, '0')}-${String(defaultDay).padStart(2, '0')}`;
+                
+                // 生成天数按钮
+                for (let i = 1; i <= totalDays; i++) {
+                    const dayStr = String(i).padStart(2, '0');
+                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${dayStr}`;
+                    const btn = createCalendarBtn(dayStr, dateStr, dateStr === currentSelectValue);
+                    calendarPicker.appendChild(btn);
+                }
+                
+                statsTitle.textContent = `📅 当日统计（${currentSelectValue}）`;
             } else if (dimension === 'month') {
-                filterDateInput.placeholder = 'YYYY-MM';
-                filterDateInput.value = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}`;
-                statsTitle.textContent = '📆 当月统计';
+                // 月维度：生成当年所有月份
+                const year = today.getFullYear();
+                const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+                // 默认选中当月
+                const defaultMonth = String(today.getMonth() + 1).padStart(2, '0');
+                currentSelectValue = `${year}-${defaultMonth}`;
+                
+                // 生成月份按钮
+                months.forEach(month => {
+                    const monthName = `${month}月`;
+                    const monthStr = `${year}-${month}`;
+                    const btn = createCalendarBtn(monthName, monthStr, monthStr === currentSelectValue);
+                    calendarPicker.appendChild(btn);
+                });
+                
+                statsTitle.textContent = `📆 当月统计（${currentSelectValue}）`;
             } else if (dimension === 'year') {
-                filterDateInput.placeholder = 'YYYY';
-                filterDateInput.value = today.getFullYear();
-                statsTitle.textContent = '📈 当年统计';
+                // 年维度：生成近5年
+                const currentYear = today.getFullYear();
+                const years = [];
+                for (let i = currentYear; i >= currentYear - 4; i--) {
+                    years.push(i);
+                }
+                // 默认选中当年
+                currentSelectValue = `${currentYear}`;
+                
+                // 生成年份按钮
+                years.forEach(year => {
+                    const yearStr = `${year}`;
+                    const btn = createCalendarBtn(yearStr + '年', yearStr, yearStr === currentSelectValue);
+                    calendarPicker.appendChild(btn);
+                });
+                
+                statsTitle.textContent = `📈 当年统计（${currentSelectValue}）`;
             }
         }
 
-        // 3. 本地存储操作 - 获取所有记录
+        // 3. 创建日历按钮（工具函数）
+        function createCalendarBtn(text, value, isActive) {
+            const btn = document.createElement('div');
+            btn.className = `calendar-btn ${isActive ? 'active' : ''}`;
+            btn.textContent = text;
+            btn.dataset.value = value;
+            
+            // 点击切换选中状态
+            btn.addEventListener('click', function() {
+                // 移除所有按钮的active类
+                document.querySelectorAll('.calendar-btn').forEach(item => {
+                    item.classList.remove('active');
+                });
+                // 添加当前按钮的active类
+                this.classList.add('active');
+                // 更新选中值
+                currentSelectValue = this.dataset.value;
+                // 更新统计标题
+                const dimension = document.getElementById('viewDimension').value;
+                const statsTitle = document.getElementById('statsTitle');
+                if (dimension === 'day') {
+                    statsTitle.textContent = `📅 当日统计（${currentSelectValue}）`;
+                } else if (dimension === 'month') {
+                    statsTitle.textContent = `📆 当月统计（${currentSelectValue}）`;
+                } else if (dimension === 'year') {
+                    statsTitle.textContent = `📈 当年统计（${currentSelectValue}）`;
+                }
+            });
+            
+            return btn;
+        }
+
+        // 4. 本地存储操作 - 获取所有记录
         function getRecords() {
             const records = localStorage.getItem('familyAccountRecords');
             return records ? JSON.parse(records) : [];
         }
 
-        // 4. 本地存储操作 - 保存记录
+        // 5. 本地存储操作 - 保存记录
         function saveRecords(records) {
             localStorage.setItem('familyAccountRecords', JSON.stringify(records));
         }
 
-        // 5. 添加记账记录
+        // 6. 添加记账记录
         function addRecord() {
             // 获取表单数据
             const user = document.getElementById('userSelect').value;
@@ -546,7 +758,7 @@
             alert('🎉 记账成功！');
         }
 
-        // 6. 加载并渲染记账明细（新增修改按钮）
+        // 7. 加载并渲染记账明细
         function loadRecords(filteredRecords = null) {
             const records = filteredRecords || getRecords();
             const recordsBody = document.getElementById('recordsBody');
@@ -565,14 +777,14 @@
                     <td>${record.remark || '-'}</td>
                     <td class="operate-btn">
                         <span class="edit-btn" onclick="editRecord(${record.id})">修改</span>
-                        <span class="delete-btn" onclick="deleteRecord(${record.id})">删除</span>
+                        <span class="delete-btn" onclick="showDeleteModal(${record.id})">删除</span>
                     </td>
                 `;
                 recordsBody.appendChild(tr);
             });
         }
 
-        // 7. 编辑记录 - 回填数据到表单
+        // 8. 编辑记录 - 回填数据到表单
         function editRecord(recordId) {
             const records = getRecords();
             const record = records.find(item => item.id === recordId);
@@ -596,7 +808,7 @@
             document.getElementById('editRecordBtn').style.display = 'inline-block';
         }
 
-        // 8. 保存修改后的记录
+        // 9. 保存修改后的记录
         function saveEditRecord() {
             const editId = parseInt(document.getElementById('editRecordId').value);
             if (!editId) return;
@@ -650,31 +862,85 @@
             alert('✏️ 记录修改成功！');
         }
 
-        // 9. 删除记账记录
-        function deleteRecord(id) {
-            if (confirm('⚠️ 确定要删除这条记录吗？删除后无法恢复哦～')) {
-                let records = getRecords();
-                records = records.filter(record => record.id !== id);
-                saveRecords(records);
-                loadRecords();
-                filterRecords();
-                alert('🗑️ 记录已删除！');
-            }
+        // 10. 显示删除确认弹窗
+        function showDeleteModal(recordId) {
+            waitDeleteRecordId = recordId;
+            document.getElementById('deleteModal').classList.add('show');
         }
 
-        // 10. 筛选并统计数据（新增家庭总支出）
+        // 11. 隐藏删除确认弹窗
+        function hideDeleteModal() {
+            waitDeleteRecordId = null;
+            document.getElementById('deleteModal').classList.remove('show');
+        }
+
+        // 12. 确认删除记录
+        function confirmDeleteRecord() {
+            if (!waitDeleteRecordId) return;
+
+            let records = getRecords();
+            records = records.filter(record => record.id !== waitDeleteRecordId);
+            saveRecords(records);
+            loadRecords();
+            filterRecords();
+            
+            // 隐藏弹窗并提示
+            hideDeleteModal();
+            // 自定义提示（替代alert）
+            showToast('🗑️ 记录已成功删除！');
+        }
+
+        // 13. 自定义提示Toast（优化体验）
+        function showToast(message) {
+            // 创建toast元素
+            const toast = document.createElement('div');
+            toast.style.position = 'fixed';
+            toast.style.bottom = '30px';
+            toast.style.left = '50%';
+            toast.style.transform = 'translateX(-50%)';
+            toast.style.padding = '12px 20px';
+            toast.style.background = 'rgba(74, 74, 72, 0.8)';
+            toast.style.color = 'white !important';
+            toast.style.borderRadius = '8px';
+            toast.style.fontSize = '14px';
+            toast.style.zIndex = '9999';
+            toast.style.opacity = '0';
+            toast.style.transition = 'opacity 0.3s ease';
+            toast.textContent = message;
+            
+            // 添加到页面
+            document.body.appendChild(toast);
+            
+            // 显示toast
+            setTimeout(() => {
+                toast.style.opacity = '1';
+            }, 100);
+            
+            // 3秒后移除
+            setTimeout(() => {
+                toast.style.opacity = '0';
+                setTimeout(() => {
+                    document.body.removeChild(toast);
+                }, 300);
+            }, 3000);
+        }
+
+        // 14. 筛选并统计数据
         function filterRecords() {
             const dimension = document.getElementById('viewDimension').value;
-            const filterValue = document.getElementById('filterDate').value.trim();
+            const filterValue = currentSelectValue;
             const records = getRecords();
 
             // 筛选符合条件的记录
             let filteredRecords = [];
             if (dimension === 'day') {
+                // 按日筛选：精确匹配YYYY-MM-DD
                 filteredRecords = records.filter(record => record.date === filterValue);
             } else if (dimension === 'month') {
+                // 按月筛选：匹配YYYY-MM开头
                 filteredRecords = records.filter(record => record.date.startsWith(filterValue));
             } else if (dimension === 'year') {
+                // 按年筛选：匹配YYYY开头
                 filteredRecords = records.filter(record => record.date.startsWith(filterValue));
             }
 
@@ -700,15 +966,15 @@
                 }
             });
 
-            // 计算汇总值 - 新增家庭总支出
-            const totalExpense = husbandExpense + wifeExpense; // 家庭总支出
+            // 计算汇总值
+            const totalExpense = husbandExpense + wifeExpense;
             const totalIncome = husbandIncome + wifeIncome;
             const totalBalance = totalIncome - totalExpense;
 
-            // 更新统计显示 - 新增家庭总支出
+            // 更新统计显示
             document.getElementById('husbandExpense').textContent = husbandExpense.toFixed(2);
             document.getElementById('wifeExpense').textContent = wifeExpense.toFixed(2);
-            document.getElementById('totalExpense').textContent = totalExpense.toFixed(2); // 家庭总支出
+            document.getElementById('totalExpense').textContent = totalExpense.toFixed(2);
             document.getElementById('totalIncome').textContent = totalIncome.toFixed(2);
             document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
 
@@ -720,7 +986,7 @@
             loadRecords(filteredRecords);
         }
 
-        // 11. 渲染分类明细统计
+        // 15. 渲染分类明细统计
         function renderCategoryStats(type, categoryTotal) {
             const gridId = type === 'expense' ? 'expenseCategoryGrid' : 'incomeCategoryGrid';
             const grid = document.getElementById(gridId);
@@ -742,7 +1008,7 @@
             }
         }
 
-        // 12. 重置表单（新增工具函数）
+        // 16. 重置表单
         function resetForm() {
             const today = new Date().toISOString().split('T')[0];
             document.getElementById('userSelect').value = '丈夫';
