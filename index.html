@@ -5,48 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>温馨家庭记账本</title>
     <style>
-        /* 全局样式 - 高级质感风格核心调整 */
+        /* 全局样式 - 高级质感风格 */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            /* 字体优化：更高级的无衬线字体组合，增强质感 */
             font-family: "Inter", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-            /* 主文字色：低饱和深灰，替代原#555，更高级不刺眼 */
-            color: #4a4a48; 
+            color: #4a4a48;
             font-weight: 400;
         }
         body {
             max-width: 1000px;
             margin: 0 auto;
             padding: 20px;
-            /* 背景色：低饱和浅灰米色，替代原浅米色#f9f6f0，高级感拉满 */
-            background-color: #f5f2ed; 
+            background-color: #f5f2ed;
             min-height: 100vh;
-            /* 轻微背景肌理，增强质感（可选，可删除） */
             background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d9d6d0' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
         }
         .container {
-            /* 主体背景：纯净白，替代原浅暖底色#fff8f0，更干净高级 */
-            background: #ffffff; 
+            background: #ffffff;
             padding: 30px;
-            border-radius: 16px; /* 适度圆角，比原20px更克制，高级感 */
-            box-shadow: 0 8px 24px rgba(150, 140, 130, 0.06); /* 低饱和柔和阴影，替代原暖色调阴影 */
-            border: 1px solid rgba(233, 230, 225, 0.6); /* 极细边框，增强质感 */
+            border-radius: 16px;
+            box-shadow: 0 8px 24px rgba(150, 140, 130, 0.06);
+            border: 1px solid rgba(233, 230, 225, 0.6);
         }
         h1 {
             text-align: center;
-            /* 主色调：低饱和赤陶色，替代原暖红#e85a4f，高级不张扬 */
-            color: #c87065; 
+            color: #c87065;
             margin-bottom: 30px;
-            letter-spacing: 2px; /* 字间距更克制，原3px */
-            font-weight: 500; /* 字体粗细更柔和，原600 */
+            letter-spacing: 2px;
+            font-weight: 500;
             font-size: 22px;
         }
 
         /* 录入区域样式 */
         .input-section {
-            border-bottom: 1px solid #e9e6e1; /* 低饱和浅灰边框，替代原浅棕#f0e6d2 */
+            border-bottom: 1px solid #e9e6e1;
             padding-bottom: 25px;
             margin-bottom: 25px;
         }
@@ -59,8 +53,7 @@
         }
         .form-group label {
             width: 80px;
-            /* 标签文字色：低饱和中灰，替代原#666 */
-            color: #5c5c59; 
+            color: #5c5c59;
             font-weight: 500;
             flex-shrink: 0;
         }
@@ -70,22 +63,21 @@
             flex: 1;
             min-width: 200px;
             padding: 12px 15px;
-            /* 输入框边框：低饱和浅灰，替代原#e0d8c8 */
-            border: 1px solid #e9e6e1; 
-            border-radius: 10px; /* 圆角更克制，原12px */
+            border: 1px solid #e9e6e1;
+            border-radius: 10px;
             font-size: 14px;
             background: #ffffff;
-            transition: all 0.3s ease; /* 过渡更丝滑 */
+            transition: all 0.3s ease;
         }
         .form-group select:focus, 
         .form-group input:focus, 
         .form-group textarea:focus {
             outline: none;
-            border-color: #c87065; /* 聚焦色同步主色调 */
-            box-shadow: 0 0 0 3px rgba(200, 112, 101, 0.08); /* 低饱和聚焦阴影，更高级 */
+            border-color: #c87065;
+            box-shadow: 0 0 0 3px rgba(200, 112, 101, 0.08);
         }
         .form-group button {
-            background: #c87065; /* 按钮色同步主色调 */
+            background: #c87065;
             color: white !important;
             border: none;
             padding: 12px 30px;
@@ -97,7 +89,13 @@
             flex-shrink: 0;
         }
         .form-group button:hover {
-            background: #b46056; /* hover色更暗一点，过渡自然 */
+            background: #b46056;
+        }
+        .form-group .edit-btn {
+            background: #7a9d7a; /* 修改按钮用收入的鼠尾草绿，区分添加 */
+        }
+        .form-group .edit-btn:hover {
+            background: #6a8d6a;
         }
 
         /* 筛选区域 */
@@ -106,16 +104,16 @@
             padding: 15px;
             background: #ffffff;
             border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(150, 140, 130, 0.04); /* 更柔和的阴影 */
+            box-shadow: 0 4px 12px rgba(150, 140, 130, 0.04);
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
             align-items: center;
-            border: 1px solid #e9e6e1; /* 细边框增强质感 */
+            border: 1px solid #e9e6e1;
         }
         .filter-section label {
             font-weight: 500;
-            color: #5c5c59; /* 同步标签色 */
+            color: #5c5c59;
             flex-shrink: 0;
         }
         .filter-section select, .filter-section input {
@@ -155,7 +153,7 @@
         }
         .stats-title {
             font-weight: 500;
-            color: #c87065; /* 同步主色调 */
+            color: #c87065;
             margin-bottom: 15px;
             font-size: 16px;
         }
@@ -167,8 +165,7 @@
         }
         .stats-item {
             padding: 15px;
-            /* 统计卡片背景：极浅灰，替代原#fff8f0 */
-            background: #f8f6f3; 
+            background: #f8f6f3;
             border-radius: 8px;
             text-align: center;
             transition: transform 0.2s ease;
@@ -176,12 +173,11 @@
         }
         .stats-item:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(150, 140, 130, 0.08); /* hover阴影更柔和 */
+            box-shadow: 0 4px 12px rgba(150, 140, 130, 0.08);
         }
         .stats-item .label {
             font-size: 13px;
-            /* 次要文字色：低饱和浅灰，替代原#777 */
-            color: #8a8a86; 
+            color: #8a8a86;
             margin-bottom: 8px;
             font-weight: 400;
         }
@@ -189,15 +185,14 @@
             font-size: 18px;
             font-weight: 500;
         }
-        /* 收支颜色调整：低饱和莫兰迪色系，替代原高饱和色 */
         .expense {
-            color: #d49667; /* 焦糖色，替代原暖橙#f39c12 */
+            color: #d49667;
         }
         .income {
-            color: #7a9d7a; /* 鼠尾草绿，替代原清新绿#27ae60 */
+            color: #7a9d7a;
         }
         .balance {
-            color: #c87065; /* 同步主色调 */
+            color: #c87065;
         }
 
         /* 分类明细统计 */
@@ -208,7 +203,7 @@
             font-size: 15px;
             font-weight: 500;
             margin-bottom: 10px;
-            color: #5c5c59; /* 同步标签色 */
+            color: #5c5c59;
         }
         .category-grid {
             display: grid;
@@ -223,7 +218,7 @@
             border: 1px solid #e9e6e1;
         }
         .category-item .name {
-            color: #8a8a86; /* 同步次要文字色 */
+            color: #8a8a86;
             font-size: 12px;
             margin-bottom: 5px;
         }
@@ -252,8 +247,21 @@
             font-size: 14px;
         }
         .records-section tr:hover {
-            /* hover背景：极浅灰，替代原#fef9f3 */
-            background: #faf9f7; 
+            background: #faf9f7;
+        }
+        .operate-btn {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .edit-btn {
+            color: #7a9d7a;
+            cursor: pointer;
+            font-size: 13px;
+            transition: color 0.3s ease;
+        }
+        .edit-btn:hover {
+            color: #6a8d6a;
         }
         .delete-btn {
             color: #c87065;
@@ -282,6 +290,11 @@
             }
             .stats-summary {
                 grid-template-columns: repeat(2, 1fr);
+            }
+            .operate-btn {
+                flex-direction: column;
+                gap: 5px;
+                align-items: flex-start;
             }
         }
     </style>
@@ -326,6 +339,9 @@
             </div>
             <div class="form-group">
                 <button id="addRecordBtn">✨ 添加记账记录</button>
+                <button id="editRecordBtn" class="edit-btn" style="display: none;">✏️ 保存修改</button>
+                <!-- 隐藏的修改ID存储 -->
+                <input type="hidden" id="editRecordId" value="">
             </div>
         </div>
 
@@ -345,7 +361,7 @@
         <div class="stats-section">
             <div class="stats-title" id="statsTitle">当日统计（默认今日）</div>
             
-            <!-- 汇总数据 -->
+            <!-- 汇总数据 - 新增「家庭总支出」 -->
             <div class="stats-summary">
                 <div class="stats-item">
                     <div class="label">丈夫支出</div>
@@ -354,6 +370,10 @@
                 <div class="stats-item">
                     <div class="label">妻子支出</div>
                     <div class="value expense" id="wifeExpense">0.00</div>
+                </div>
+                <div class="stats-item">
+                    <div class="label">家庭总支出</div>
+                    <div class="value expense" id="totalExpense">0.00</div>
                 </div>
                 <div class="stats-item">
                     <div class="label">家庭总收入</div>
@@ -404,7 +424,7 @@
     </div>
 
     <script>
-        // 定义多级分类数据（可自行扩展）
+        // 定义多级分类数据
         const categoryData = {
             支出: ['餐饮', '服饰', '住房', '交通', '娱乐', '日用品', '医疗', '育儿', '其他'],
             收入: ['薪资', '兼职', '理财', '礼金', '其他']
@@ -426,9 +446,9 @@
             // 初始化统计
             filterRecords();
 
-            // 绑定添加记录按钮事件
+            // 绑定按钮事件
             document.getElementById('addRecordBtn').addEventListener('click', addRecord);
-            // 绑定筛选按钮事件
+            document.getElementById('editRecordBtn').addEventListener('click', saveEditRecord);
             document.getElementById('filterBtn').addEventListener('click', filterRecords);
         });
 
@@ -439,9 +459,7 @@
             const currentType = typeSelect.value;
             const categories = categoryData[currentType];
 
-            // 清空原有选项
             categorySelect.innerHTML = '';
-            // 生成新选项
             categories.forEach(category => {
                 const option = document.createElement('option');
                 option.value = category;
@@ -503,9 +521,9 @@
                 return;
             }
 
-            // 创建新记录（包含具体分类）
+            // 创建新记录
             const newRecord = {
-                id: Date.now(), // 时间戳作为唯一ID
+                id: Date.now(),
                 user: user,
                 type: type,
                 category: category,
@@ -520,8 +538,7 @@
             saveRecords(records);
 
             // 重置表单
-            document.getElementById('amountInput').value = '';
-            document.getElementById('remarkInput').value = '';
+            resetForm();
 
             // 重新加载数据和统计
             loadRecords();
@@ -529,13 +546,13 @@
             alert('🎉 记账成功！');
         }
 
-        // 6. 加载并渲染记账明细
+        // 6. 加载并渲染记账明细（新增修改按钮）
         function loadRecords(filteredRecords = null) {
             const records = filteredRecords || getRecords();
             const recordsBody = document.getElementById('recordsBody');
             recordsBody.innerHTML = '';
 
-            // 倒序显示（最新的在最上面）
+            // 倒序显示
             const reversedRecords = [...records].reverse();
             reversedRecords.forEach(record => {
                 const tr = document.createElement('tr');
@@ -546,13 +563,94 @@
                     <td>${record.category}</td>
                     <td>${record.amount.toFixed(2)}</td>
                     <td>${record.remark || '-'}</td>
-                    <td class="delete-btn" onclick="deleteRecord(${record.id})">删除</td>
+                    <td class="operate-btn">
+                        <span class="edit-btn" onclick="editRecord(${record.id})">修改</span>
+                        <span class="delete-btn" onclick="deleteRecord(${record.id})">删除</span>
+                    </td>
                 `;
                 recordsBody.appendChild(tr);
             });
         }
 
-        // 7. 删除记账记录
+        // 7. 编辑记录 - 回填数据到表单
+        function editRecord(recordId) {
+            const records = getRecords();
+            const record = records.find(item => item.id === recordId);
+            if (!record) return;
+
+            // 回填数据到表单
+            document.getElementById('userSelect').value = record.user;
+            document.getElementById('typeSelect').value = record.type;
+            // 先更新分类选项，再选对应分类
+            changeCategoryOptions();
+            document.getElementById('categorySelect').value = record.category;
+            document.getElementById('amountInput').value = record.amount;
+            document.getElementById('dateInput').value = record.date;
+            document.getElementById('remarkInput').value = record.remark || '';
+
+            // 存储当前修改的记录ID
+            document.getElementById('editRecordId').value = recordId;
+
+            // 切换按钮显示：隐藏添加，显示修改
+            document.getElementById('addRecordBtn').style.display = 'none';
+            document.getElementById('editRecordBtn').style.display = 'inline-block';
+        }
+
+        // 8. 保存修改后的记录
+        function saveEditRecord() {
+            const editId = parseInt(document.getElementById('editRecordId').value);
+            if (!editId) return;
+
+            // 获取修改后的表单数据
+            const user = document.getElementById('userSelect').value;
+            const type = document.getElementById('typeSelect').value;
+            const category = document.getElementById('categorySelect').value;
+            const amount = parseFloat(document.getElementById('amountInput').value);
+            const date = document.getElementById('dateInput').value;
+            const remark = document.getElementById('remarkInput').value.trim();
+
+            // 表单验证
+            if (!amount || isNaN(amount) || amount <= 0) {
+                alert('💡 请输入有效的金额（大于0）！');
+                return;
+            }
+            if (!date) {
+                alert('💡 请选择记账日期！');
+                return;
+            }
+
+            // 找到并更新记录
+            let records = getRecords();
+            records = records.map(item => {
+                if (item.id === editId) {
+                    return {
+                        ...item,
+                        user: user,
+                        type: type,
+                        category: category,
+                        amount: amount,
+                        date: date,
+                        remark: remark
+                    };
+                }
+                return item;
+            });
+
+            // 保存修改
+            saveRecords(records);
+
+            // 重置表单和按钮状态
+            resetForm();
+            document.getElementById('addRecordBtn').style.display = 'inline-block';
+            document.getElementById('editRecordBtn').style.display = 'none';
+
+            // 重新加载数据和统计
+            loadRecords();
+            filterRecords();
+            alert('✏️ 记录修改成功！');
+        }
+
+        // 9. 删除记账记录
         function deleteRecord(id) {
             if (confirm('⚠️ 确定要删除这条记录吗？删除后无法恢复哦～')) {
                 let records = getRecords();
@@ -564,7 +662,7 @@
             }
         }
 
-        // 8. 筛选并统计数据（核心）
+        // 10. 筛选并统计数据（新增家庭总支出）
         function filterRecords() {
             const dimension = document.getElementById('viewDimension').value;
             const filterValue = document.getElementById('filterDate').value.trim();
@@ -573,50 +671,44 @@
             // 筛选符合条件的记录
             let filteredRecords = [];
             if (dimension === 'day') {
-                // 按日筛选：精确匹配YYYY-MM-DD
                 filteredRecords = records.filter(record => record.date === filterValue);
             } else if (dimension === 'month') {
-                // 按月筛选：匹配YYYY-MM开头
                 filteredRecords = records.filter(record => record.date.startsWith(filterValue));
             } else if (dimension === 'year') {
-                // 按年筛选：匹配YYYY开头
                 filteredRecords = records.filter(record => record.date.startsWith(filterValue));
             }
 
-            // 基础统计：按记账人+收支类型汇总
+            // 基础统计
             let husbandExpense = 0, wifeExpense = 0;
             let husbandIncome = 0, wifeIncome = 0;
-            // 分类统计：按收支类型+具体分类汇总
+            // 分类统计
             const expenseCategoryTotal = {}, incomeCategoryTotal = {};
-            // 初始化分类统计（避免无数据时显示空）
             categoryData.支出.forEach(cat => expenseCategoryTotal[cat] = 0);
             categoryData.收入.forEach(cat => incomeCategoryTotal[cat] = 0);
 
-            // 遍历筛选后的记录计算
+            // 遍历计算
             filteredRecords.forEach(record => {
                 const { user, type, category, amount } = record;
-                // 基础统计
                 if (type === '支出') {
                     if (user === '丈夫') husbandExpense += amount;
                     else wifeExpense += amount;
-                    // 支出分类统计
                     expenseCategoryTotal[category] += amount;
                 } else {
                     if (user === '丈夫') husbandIncome += amount;
                     else wifeIncome += amount;
-                    // 收入分类统计
                     incomeCategoryTotal[category] += amount;
                 }
             });
 
-            // 计算汇总值
-            const totalExpense = husbandExpense + wifeExpense;
+            // 计算汇总值 - 新增家庭总支出
+            const totalExpense = husbandExpense + wifeExpense; // 家庭总支出
             const totalIncome = husbandIncome + wifeIncome;
             const totalBalance = totalIncome - totalExpense;
 
-            // 更新基础统计显示
+            // 更新统计显示 - 新增家庭总支出
             document.getElementById('husbandExpense').textContent = husbandExpense.toFixed(2);
             document.getElementById('wifeExpense').textContent = wifeExpense.toFixed(2);
+            document.getElementById('totalExpense').textContent = totalExpense.toFixed(2); // 家庭总支出
             document.getElementById('totalIncome').textContent = totalIncome.toFixed(2);
             document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
 
@@ -628,15 +720,14 @@
             loadRecords(filteredRecords);
         }
 
-        // 9. 渲染分类明细统计
+        // 11. 渲染分类明细统计
         function renderCategoryStats(type, categoryTotal) {
             const gridId = type === 'expense' ? 'expenseCategoryGrid' : 'incomeCategoryGrid';
             const grid = document.getElementById(gridId);
             grid.innerHTML = '';
 
-            // 遍历分类统计数据，只显示有金额的分类（优化视觉）
             Object.entries(categoryTotal).forEach(([category, amount]) => {
-                if (amount <= 0) return; // 隐藏无金额的分类
+                if (amount <= 0) return;
                 const item = document.createElement('div');
                 item.className = 'category-item';
                 item.innerHTML = `
@@ -646,10 +737,21 @@
                 grid.appendChild(item);
             });
 
-            // 如果没有数据，显示提示
             if (grid.children.length === 0) {
                 grid.innerHTML = `<div class="category-item">暂无${type === 'expense' ? '支出' : '收入'}数据</div>`;
             }
+        }
+
+        // 12. 重置表单（新增工具函数）
+        function resetForm() {
+            const today = new Date().toISOString().split('T')[0];
+            document.getElementById('userSelect').value = '丈夫';
+            document.getElementById('typeSelect').value = '支出';
+            changeCategoryOptions();
+            document.getElementById('amountInput').value = '';
+            document.getElementById('dateInput').value = today;
+            document.getElementById('remarkInput').value = '';
+            document.getElementById('editRecordId').value = '';
         }
     </script>
 </body>
