@@ -3,1246 +3,224 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>温馨家庭记账本</title>
+    <title>家庭记账本（完整无截断版）</title>
     <style>
-        /* 全局样式 - 高级质感风格 */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: "Inter", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
-            color: #4a4a48;
-            font-weight: 400;
-        }
-        body {
-            max-width: 1000px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f5f2ed;
-            min-height: 100vh;
-            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23d9d6d0' fill-opacity='0.2' fill-rule='evenodd'/%3E%3C/svg%3E");
-        }
-        .container {
-            background: #ffffff;
-            padding: 30px;
-            border-radius: 16px;
-            box-shadow: 0 8px 24px rgba(150, 140, 130, 0.06);
-            border: 1px solid rgba(233, 230, 225, 0.6);
-        }
-        h1 {
-            text-align: center;
-            color: #c87065;
-            margin-bottom: 30px;
-            letter-spacing: 2px;
-            font-weight: 500;
-            font-size: 22px;
-        }
-
-        /* 录入区域样式 */
-        .input-section {
-            border-bottom: 1px solid #e9e6e1;
-            padding-bottom: 25px;
-            margin-bottom: 25px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-            display: flex;
-            align-items: center;
-            gap: 15px;
-            flex-wrap: wrap;
-        }
-        .form-group label {
-            width: 80px;
-            color: #5c5c59;
-            font-weight: 500;
-            flex-shrink: 0;
-        }
-        .form-group select, 
-        .form-group input, 
-        .form-group textarea {
-            flex: 1;
-            min-width: 200px;
-            padding: 12px 15px;
-            border: 1px solid #e9e6e1;
-            border-radius: 10px;
-            font-size: 14px;
-            background: #ffffff;
-            transition: all 0.3s ease;
-        }
-        .form-group select:focus, 
-        .form-group input:focus, 
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #c87065;
-            box-shadow: 0 0 0 3px rgba(200, 112, 101, 0.08);
-        }
-        .form-group button {
-            background: #c87065;
-            color: white !important;
-            border: none;
-            padding: 12px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 15px;
-            font-weight: 500;
-            transition: background 0.3s ease;
-            flex-shrink: 0;
-        }
-        .form-group button:hover {
-            background: #b46056;
-        }
-        .form-group .edit-btn {
-            background: #7a9d7a; /* 修改按钮用收入的鼠尾草绿，区分添加 */
-        }
-        .form-group .edit-btn:hover {
-            background: #6a8d6a;
-        }
-        /* 备注快捷短语 */
-        .remark-tags {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-            flex-wrap: wrap;
-        }
-        .remark-tag {
-            padding: 5px 12px;
-            background: #f8f6f3;
-            border-radius: 6px;
-            font-size: 12px;
-            color: #5c5c59;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        .remark-tag:hover {
-            background: #f0ece7;
-        }
-
-        /* 筛选区域 - 日历选择器样式 */
-        .filter-section {
-            margin-bottom: 25px;
-            padding: 15px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(150, 140, 130, 0.04);
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
-            align-items: flex-start;
-            border: 1px solid #e9e6e1;
-        }
-        .filter-section label {
-            font-weight: 500;
-            color: #5c5c59;
-            flex-shrink: 0;
-            margin-top: 5px;
-        }
-        .filter-section select {
-            padding: 10px 12px;
-            border: 1px solid #e9e6e1;
-            border-radius: 8px;
-            flex-shrink: 0;
-            min-width: 120px;
-            transition: border 0.3s ease;
-        }
-        .filter-section select:focus {
-            border-color: #c87065;
-            outline: none;
-        }
-        /* 日历选择器容器 */
-        .calendar-picker {
-            flex: 1;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-            gap: 8px;
-            margin-top: 5px;
-        }
-        /* 日期/月份/年份按钮 */
-        .calendar-btn {
-            padding: 10px 0;
-            border: 1px solid #e9e6e1;
-            border-radius: 8px;
-            background: #f8f6f3;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 14px;
-        }
-        .calendar-btn:hover {
-            background: #f0ece7;
-            border-color: #d9d6d0;
-        }
-        .calendar-btn.active {
-            background: #c87065;
-            color: white !important;
-            border-color: #c87065;
-        }
-        .filter-section .query-btn {
-            background: #c87065;
-            color: white !important;
-            border: none;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: background 0.3s ease;
-            flex-shrink: 0;
-            margin-top: 5px;
-        }
-        .filter-section .query-btn:hover {
-            background: #b46056;
-        }
-
-        /* 统计区域 */
-        .stats-section {
-            margin-bottom: 25px;
-            padding: 20px;
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(150, 140, 130, 0.04);
-            border: 1px solid #e9e6e1;
-        }
-        .stats-title {
-            font-weight: 500;
-            color: #c87065;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-        .stats-summary {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        .stats-item {
-            padding: 15px;
-            background: #f8f6f3;
-            border-radius: 8px;
-            text-align: center;
-            transition: transform 0.2s ease;
-            border: 1px solid #e9e6e1;
-        }
-        .stats-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(150, 140, 130, 0.08);
-        }
-        .stats-item .label {
-            font-size: 13px;
-            color: #8a8a86;
-            margin-bottom: 8px;
-            font-weight: 400;
-        }
-        .stats-item .value {
-            font-size: 18px;
-            font-weight: 500;
-        }
-        .expense {
-            color: #d49667;
-        }
-        .income {
-            color: #7a9d7a;
-        }
-        .balance {
-            color: #c87065;
-        }
-
-        /* 分类明细统计 */
-        .category-stats {
-            margin-top: 20px;
-        }
-        .category-title {
-            font-size: 15px;
-            font-weight: 500;
-            margin-bottom: 10px;
-            color: #5c5c59;
-        }
-        .category-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 10px;
-        }
-        .category-item {
-            padding: 10px;
-            background: #f8f6f3;
-            border-radius: 6px;
-            font-size: 14px;
-            border: 1px solid #e9e6e1;
-        }
-        .category-item .name {
-            color: #8a8a86;
-            font-size: 12px;
-            margin-bottom: 5px;
-        }
-
-        /* 明细区域 */
-        .records-section {
-            background: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0 4px 12px rgba(150, 140, 130, 0.04);
-            overflow: hidden;
-            border: 1px solid #e9e6e1;
-        }
-        .records-section table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        .records-section th, .records-section td {
-            padding: 15px;
-            text-align: left;
-            border-bottom: 1px solid #e9e6e1;
-        }
-        .records-section th {
-            background: #f8f6f3;
-            color: #5c5c59;
-            font-weight: 500;
-            font-size: 14px;
-            position: sticky;
-            top: 0;
-            z-index: 10;
-        }
-        .records-section tr:hover {
-            background: #faf9f7;
-        }
-        .operate-btn {
-            display: flex;
-            gap: 10px;
-            align-items: center;
-        }
-        .edit-btn {
-            color: #7a9d7a;
-            cursor: pointer;
-            font-size: 13px;
-            transition: color 0.3s ease;
-        }
-        .edit-btn:hover {
-            color: #6a8d6a;
-        }
-        .delete-btn {
-            color: #c87065;
-            cursor: pointer;
-            font-size: 13px;
-            transition: color 0.3s ease;
-        }
-        .delete-btn:hover {
-            color: #b46056;
-        }
-        /* 金额列右对齐 */
-        .amount-col {
-            text-align: right !important;
-        }
-
-        /* 自定义删除确认弹窗 */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 9999;
-            opacity: 0;
-            visibility: hidden;
-            transition: all 0.3s ease;
-        }
-        .modal-overlay.show {
-            opacity: 1;
-            visibility: visible;
-        }
-        .modal-box {
-            background: #ffffff;
-            border-radius: 16px;
-            padding: 30px;
-            width: 90%;
-            max-width: 400px;
-            box-shadow: 0 8px 24px rgba(150, 140, 130, 0.15);
-            transform: translateY(20px);
-            transition: transform 0.3s ease;
-        }
-        .modal-overlay.show .modal-box {
-            transform: translateY(0);
-        }
-        .modal-title {
-            font-size: 18px;
-            font-weight: 500;
-            color: #4a4a48;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .modal-content {
-            font-size: 14px;
-            color: #5c5c59;
-            margin-bottom: 25px;
-            text-align: center;
-            line-height: 1.6;
-        }
-        .modal-btns {
-            display: flex;
-            gap: 15px;
-            justify-content: center;
-        }
-        .modal-btn {
-            padding: 10px 25px;
-            border-radius: 10px;
-            border: none;
-            font-size: 14px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-        .modal-btn.cancel {
-            background: #f8f6f3;
-            color: #5c5c59;
-        }
-        .modal-btn.cancel:hover {
-            background: #f0ece7;
-        }
-        .modal-btn.confirm {
-            background: #c87065;
-            color: white !important;
-        }
-        .modal-btn.confirm:hover {
-            background: #b46056;
-        }
-
-        /* 空状态样式 */
-        .empty-state {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 40px 20px;
-            color: #8a8a86;
-            text-align: center;
-        }
-        .empty-state svg {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 20px;
-            fill: #e9e6e1;
-        }
-        .empty-state-text {
-            font-size: 14px;
-            margin-bottom: 8px;
-        }
-        .empty-state-tip {
-            font-size: 12px;
-            color: #a0a09c;
-        }
-
-        /* 统一Toast提示样式 */
-        .toast {
-            position: fixed;
-            bottom: 30px;
-            left: 50%;
-            transform: translateX(-50%) translateY(20px);
-            padding: 12px 20px;
-            border-radius: 8px;
-            font-size: 14px;
-            color: white !important;
-            z-index: 99999;
-            opacity: 0;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            min-width: 200px;
-            justify-content: center;
-        }
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        .toast.success {
-            background: #7a9d7a;
-        }
-        .toast.info {
-            background: #5c5c59;
-        }
-        .toast.warning {
-            background: #d49667;
-        }
-
-        /* 响应式适配 */
-        @media (max-width: 768px) {
-            body {
-                padding: 10px;
-            }
-            .container {
-                padding: 20px;
-                border-radius: 12px;
-            }
-            .form-group {
-                gap: 10px;
-            }
-            .form-group label {
-                width: 70px;
-            }
-            .stats-summary {
-                grid-template-columns: repeat(2, 1fr);
-            }
-            .operate-btn {
-                flex-direction: column;
-                gap: 5px;
-                align-items: flex-start;
-            }
-            .calendar-picker {
-                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
-            }
-            .modal-box {
-                padding: 20px;
-            }
-            .empty-state svg {
-                width: 80px;
-                height: 80px;
-            }
-            /* 移动端操作按钮图标化 */
-            .operate-btn span {
-                display: flex;
-                align-items: center;
-                gap: 5px;
-            }
-            .operate-btn span::before {
-                content: '';
-                display: inline-block;
-                width: 14px;
-                height: 14px;
-            }
-            .edit-btn::before {
-                content: '✏️';
-            }
-            .delete-btn::before {
-                content: '🗑️';
-            }
-            .operate-btn span {
-                font-size: 0;
-            }
-            .operate-btn span:hover {
-                font-size: 13px;
-            }
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: "微软雅黑", sans-serif; }
+        body { max-width: 1000px; margin: 20px auto; padding: 0 10px; background: #f5f5f5; }
+        .container { background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        h1 { text-align: center; color: #e63946; margin-bottom: 20px; }
+        .form-group { margin-bottom: 15px; display: flex; align-items: center; gap: 10px; }
+        .form-group label { width: 80px; text-align: right; }
+        .form-group input, .form-group select { flex: 1; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        .form-group button { padding: 8px 20px; background: #e63946; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .stats { margin: 20px 0; padding: 15px; background: #f8f8f8; border-radius: 4px; }
+        .stats div { margin: 5px 0; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th, td { padding: 10px; text-align: left; border-bottom: 1px solid #ddd; }
+        th { background: #f8f8f8; }
+        .operate { color: #e63946; cursor: pointer; }
+        .toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); padding: 10px 20px; background: #333; color: white; border-radius: 4px; display: none; }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🏡 温馨家庭记账本</h1>
+        <h1>家庭记账本</h1>
         
-        <!-- 记账录入区域 -->
-        <div class="input-section">
-            <div class="form-group">
-                <label>记账人：</label>
-                <select id="userSelect">
-                    <option value="丈夫">丈夫</option>
-                    <option value="妻子">妻子</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>收支类型：</label>
-                <select id="typeSelect" onchange="changeCategoryOptions()">
-                    <option value="支出">支出</option>
-                    <option value="收入">收入</option>
-                </select>
-            </div>
-            <div class="form-group">
-                <label>具体分类：</label>
-                <select id="categorySelect">
-                    <!-- 动态生成分类选项 -->
-                </select>
-            </div>
-            <div class="form-group">
-                <label>金额：</label>
-                <input type="number" id="amountInput" placeholder="请输入金额" min="0.01" step="0.01">
-            </div>
-            <div class="form-group">
-                <label>日期：</label>
-                <input type="date" id="dateInput">
-                <!-- 日期快捷按钮 -->
-                <div style="display: flex; gap: 8px; flex-shrink: 0;">
-                    <button type="button" style="padding: 8px 12px; font-size: 12px;" onclick="setQuickDate('today')">今日</button>
-                    <button type="button" style="padding: 8px 12px; font-size: 12px;" onclick="setQuickDate('yesterday')">昨日</button>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>备注：</label>
-                <textarea id="remarkInput" placeholder="记录消费/收入原因（可选）"></textarea>
-                <!-- 备注快捷短语 -->
-                <div class="remark-tags">
-                    <div class="remark-tag" onclick="fillRemark('超市采购')">超市采购</div>
-                    <div class="remark-tag" onclick="fillRemark('外卖')">外卖</div>
-                    <div class="remark-tag" onclick="fillRemark('工资到账')">工资到账</div>
-                    <div class="remark-tag" onclick="fillRemark('其他')">其他</div>
-                </div>
-            </div>
-            <div class="form-group">
-                <button id="addRecordBtn">✨ 添加记账记录</button>
-                <button id="editRecordBtn" class="edit-btn" style="display: none;">✏️ 保存修改</button>
-                <!-- 隐藏的修改ID存储 -->
-                <input type="hidden" id="editRecordId" value="">
-            </div>
-        </div>
-
-        <!-- 筛选区域 - 重构为日历选择器 -->
-        <div class="filter-section">
-            <label>查看维度：</label>
-            <select id="viewDimension" onchange="renderCalendarPicker()">
-                <option value="day">按日查看</option>
-                <option value="month">按月查看</option>
-                <option value="year">按年查看</option>
-            </select>
-            <!-- 按记账人筛选 -->
+        <!-- 录入区域 -->
+        <div class="form-group">
             <label>记账人：</label>
-            <select id="userFilter" onchange="filterRecords()">
-                <option value="all">全部</option>
+            <select id="user">
                 <option value="丈夫">丈夫</option>
                 <option value="妻子">妻子</option>
             </select>
-            <!-- 日历选择器容器 -->
-            <div class="calendar-picker" id="calendarPicker">
-                <!-- 动态生成日期/月份/年份按钮 -->
-            </div>
-            <button class="query-btn" id="filterBtn">🔍 查询</button>
+        </div>
+        <div class="form-group">
+            <label>收支类型：</label>
+            <select id="type">
+                <option value="支出">支出</option>
+                <option value="收入">收入</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>分类：</label>
+            <select id="category">
+                <option value="餐饮">餐饮</option>
+                <option value="交通">交通</option>
+                <option value="薪资">薪资</option>
+                <option value="其他">其他</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>金额：</label>
+            <input type="number" id="amount" placeholder="请输入金额" min="0.01" step="0.01">
+        </div>
+        <div class="form-group">
+            <label>日期：</label>
+            <input type="date" id="date">
+        </div>
+        <div class="form-group">
+            <label>备注：</label>
+            <input type="text" id="remark" placeholder="可选">
+        </div>
+        <div class="form-group" style="justify-content: center;">
+            <button onclick="addRecord()">添加记录</button>
+            <button onclick="exportData()" style="background: #2a9d8f; margin-left: 10px;">导出数据</button>
         </div>
 
         <!-- 统计区域 -->
-        <div class="stats-section">
-            <div class="stats-title" id="statsTitle">当日统计（默认今日）</div>
-            
-            <!-- 汇总数据 - 家庭总支出 -->
-            <div class="stats-summary">
-                <div class="stats-item">
-                    <div class="label">丈夫支出</div>
-                    <div class="value expense" id="husbandExpense">0.00</div>
-                </div>
-                <div class="stats-item">
-                    <div class="label">妻子支出</div>
-                    <div class="value expense" id="wifeExpense">0.00</div>
-                </div>
-                <div class="stats-item">
-                    <div class="label">家庭总支出</div>
-                    <div class="value expense" id="totalExpense">0.00</div>
-                </div>
-                <div class="stats-item">
-                    <div class="label">家庭总收入</div>
-                    <div class="value income" id="totalIncome">0.00</div>
-                </div>
-                <div class="stats-item">
-                    <div class="label">家庭总余额</div>
-                    <div class="value balance" id="totalBalance">0.00</div>
-                </div>
-            </div>
-
-            <!-- 支出分类明细 -->
-            <div class="category-stats" id="expenseCategoryStats">
-                <div class="category-title">📝 支出分类明细</div>
-                <div class="category-grid" id="expenseCategoryGrid">
-                    <!-- 动态生成支出分类统计 -->
-                </div>
-            </div>
-
-            <!-- 收入分类明细 -->
-            <div class="category-stats" id="incomeCategoryStats">
-                <div class="category-title">💰 收入分类明细</div>
-                <div class="category-grid" id="incomeCategoryGrid">
-                    <!-- 动态生成收入分类统计 -->
-                </div>
-            </div>
+        <div class="stats">
+            <div><strong>总支出：</strong><span id="totalExpense">0.00</span> 元</div>
+            <div><strong>总收入：</strong><span id="totalIncome">0.00</span> 元</div>
+            <div><strong>余额：</strong><span id="balance">0.00</span> 元</div>
         </div>
 
-        <!-- 记账明细区域 -->
-        <div class="records-section">
-            <table>
-                <thead>
-                    <tr>
-                        <th>日期</th>
-                        <th>记账人</th>
-                        <th>收支类型</th>
-                        <th>具体分类</th>
-                        <th class="amount-col">金额</th>
-                        <th>备注</th>
-                        <th>操作</th>
-                    </tr>
-                </thead>
-                <tbody id="recordsBody">
-                    <!-- 动态渲染记账记录 -->
-                </tbody>
-            </table>
-        </div>
+        <!-- 记录列表 -->
+        <table>
+            <thead>
+                <tr>
+                    <th>日期</th>
+                    <th>记账人</th>
+                    <th>类型</th>
+                    <th>分类</th>
+                    <th>金额</th>
+                    <th>备注</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="recordList">
+                <!-- 动态渲染记录 -->
+            </tbody>
+        </table>
     </div>
 
-    <!-- 自定义删除确认弹窗 -->
-    <div class="modal-overlay" id="deleteModal">
-        <div class="modal-box">
-            <div class="modal-title">⚠️ 确认删除</div>
-            <div class="modal-content">
-                你确定要删除这条记账记录吗？<br>删除后数据将<strong>无法恢复</strong>，请谨慎操作！
-            </div>
-            <div class="modal-btns">
-                <button class="modal-btn cancel" onclick="hideDeleteModal()">取消</button>
-                <button class="modal-btn confirm" onclick="confirmDeleteRecord()">确认删除</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Toast容器 -->
-    <div class="toast" id="globalToast"></div>
+    <div class="toast" id="toast"></div>
 
     <script>
-        // 定义多级分类数据
-        const categoryData = {
-            支出: ['餐饮', '服饰', '住房', '交通', '娱乐', '日用品', '医疗', '育儿', '其他'],
-            收入: ['薪资', '兼职', '理财', '礼金', '其他']
+        // 初始化日期为今日
+        document.getElementById('date').value = new Date().toISOString().split('T')[0];
+        
+        // 存储数据
+        let records = JSON.parse(localStorage.getItem('familyRecords')) || [];
+        
+        // 页面加载时渲染数据
+        window.onload = function() {
+            renderRecords();
+            calculateStats();
         };
 
-        // 全局变量：存储当前选中的日期/月份/年份、待删除的记录ID
-        let currentSelectValue = '';
-        let waitDeleteRecordId = null;
-
-        // 页面初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            // 设置默认日期为今天
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('dateInput').value = today;
-            
-            // 初始化分类选项
-            changeCategoryOptions();
-            // 加载表单记忆状态
-            loadFormState();
-            // 初始化日历选择器
-            renderCalendarPicker();
-            // 加载本地数据
-            loadRecords();
-            // 初始化统计
-            filterRecords();
-
-            // 绑定按钮事件
-            document.getElementById('addRecordBtn').addEventListener('click', addRecord);
-            document.getElementById('editRecordBtn').addEventListener('click', saveEditRecord);
-            document.getElementById('filterBtn').addEventListener('click', filterRecords);
-            
-            // 金额输入框绑定失焦事件（自动保留两位小数）
-            document.getElementById('amountInput').addEventListener('blur', function() {
-                this.value = formatAmount(this.value);
-            });
-        });
-
-        // 1. 切换收支类型时，更新具体分类选项
-        function changeCategoryOptions() {
-            const typeSelect = document.getElementById('typeSelect');
-            const categorySelect = document.getElementById('categorySelect');
-            const currentType = typeSelect.value;
-            const categories = categoryData[currentType];
-
-            categorySelect.innerHTML = '';
-            categories.forEach(category => {
-                const option = document.createElement('option');
-                option.value = category;
-                option.textContent = category;
-                categorySelect.appendChild(option);
-            });
-            // 切换类型后保存表单状态
-            saveFormState();
-        }
-
-        // 2. 渲染日历选择器（核心：日/月/年维度切换）
-        function renderCalendarPicker() {
-            const dimension = document.getElementById('viewDimension').value;
-            const calendarPicker = document.getElementById('calendarPicker');
-            calendarPicker.innerHTML = '';
-            const today = new Date();
-            
-            // 更新统计标题
-            const statsTitle = document.getElementById('statsTitle');
-            
-            if (dimension === 'day') {
-                // 日维度：生成当月所有天数
-                const year = today.getFullYear();
-                const month = today.getMonth();
-                // 获取当月第一天和最后一天
-                const firstDay = new Date(year, month, 1);
-                const lastDay = new Date(year, month + 1, 0);
-                const totalDays = lastDay.getDate();
-                
-                // 默认选中今天
-                const defaultDay = today.getDate();
-                currentSelectValue = `${year}-${String(month + 1).padStart(2, '0')}-${String(defaultDay).padStart(2, '0')}`;
-                
-                // 生成天数按钮
-                for (let i = 1; i <= totalDays; i++) {
-                    const dayStr = String(i).padStart(2, '0');
-                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${dayStr}`;
-                    const btn = createCalendarBtn(dayStr, dateStr, dateStr === currentSelectValue);
-                    calendarPicker.appendChild(btn);
-                }
-                
-                statsTitle.textContent = `📅 当日统计（${currentSelectValue}）`;
-            } else if (dimension === 'month') {
-                // 月维度：生成当年所有月份
-                const year = today.getFullYear();
-                const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-                // 默认选中当月
-                const defaultMonth = String(today.getMonth() + 1).padStart(2, '0');
-                currentSelectValue = `${year}-${defaultMonth}`;
-                
-                // 生成月份按钮
-                months.forEach(month => {
-                    const monthName = `${month}月`;
-                    const monthStr = `${year}-${month}`;
-                    const btn = createCalendarBtn(monthName, monthStr, monthStr === currentSelectValue);
-                    calendarPicker.appendChild(btn);
-                });
-                
-                statsTitle.textContent = `📆 当月统计（${currentSelectValue}）`;
-            } else if (dimension === 'year') {
-                // 年维度：生成近5年
-                const currentYear = today.getFullYear();
-                const years = [];
-                for (let i = currentYear; i >= currentYear - 4; i--) {
-                    years.push(i);
-                }
-                // 默认选中当年
-                currentSelectValue = `${currentYear}`;
-                
-                // 生成年份按钮
-                years.forEach(year => {
-                    const yearStr = `${year}`;
-                    const btn = createCalendarBtn(yearStr + '年', yearStr, yearStr === currentSelectValue);
-                    calendarPicker.appendChild(btn);
-                });
-                
-                statsTitle.textContent = `📈 当年统计（${currentSelectValue}）`;
-            }
-        }
-
-        // 3. 创建日历按钮（工具函数）
-        function createCalendarBtn(text, value, isActive) {
-            const btn = document.createElement('div');
-            btn.className = `calendar-btn ${isActive ? 'active' : ''}`;
-            btn.textContent = text;
-            btn.dataset.value = value;
-            
-            // 点击切换选中状态
-            btn.addEventListener('click', function() {
-                // 移除所有按钮的active类
-                document.querySelectorAll('.calendar-btn').forEach(item => {
-                    item.classList.remove('active');
-                });
-                // 添加当前按钮的active类
-                this.classList.add('active');
-                // 更新选中值
-                currentSelectValue = this.dataset.value;
-                // 更新统计标题
-                const dimension = document.getElementById('viewDimension').value;
-                const statsTitle = document.getElementById('statsTitle');
-                if (dimension === 'day') {
-                    statsTitle.textContent = `📅 当日统计（${currentSelectValue}）`;
-                } else if (dimension === 'month') {
-                    statsTitle.textContent = `📆 当月统计（${currentSelectValue}）`;
-                } else if (dimension === 'year') {
-                    statsTitle.textContent = `📈 当年统计（${currentSelectValue}）`;
-                }
-            });
-            
-            return btn;
-        }
-
-        // 4. 本地存储操作 - 获取所有记录
-        function getRecords() {
-            const records = localStorage.getItem('familyAccountRecords');
-            return records ? JSON.parse(records) : [];
-        }
-
-        // 5. 本地存储操作 - 保存记录
-        function saveRecords(records) {
-            localStorage.setItem('familyAccountRecords', JSON.stringify(records));
-        }
-
-        // 6. 表单记忆状态 - 保存
-        function saveFormState() {
-            const formState = {
-                user: document.getElementById('userSelect').value,
-                type: document.getElementById('typeSelect').value,
-                category: document.getElementById('categorySelect').value
-            };
-            localStorage.setItem('familyAccountFormState', JSON.stringify(formState));
-        }
-
-        // 7. 表单记忆状态 - 加载
-        function loadFormState() {
-            const state = localStorage.getItem('familyAccountFormState');
-            if (state) {
-                const formState = JSON.parse(state);
-                document.getElementById('userSelect').value = formState.user || '丈夫';
-                document.getElementById('typeSelect').value = formState.type || '支出';
-                // 先更新分类选项，再设置分类
-                changeCategoryOptions();
-                document.getElementById('categorySelect').value = formState.category || categoryData[formState.type || '支出'][0];
-            }
-        }
-
-        // 8. 金额格式化 - 自动保留两位小数
-        function formatAmount(amount) {
-            if (!amount || isNaN(amount) || amount <= 0) {
-                return '';
-            }
-            // 保留两位小数
-            return parseFloat(amount).toFixed(2);
-        }
-
-        // 9. 统一Toast提示 - 核心优化
-        function showToast(message, type = 'info') {
-            const toast = document.getElementById('globalToast');
-            // 类型：success(成功)、info(提示)、warning(警告)
-            const typeClass = {
-                success: 'success',
-                info: 'info',
-                warning: 'warning'
-            };
-            // 图标
-            const icon = {
-                success: '✅',
-                info: '💡',
-                warning: '⚠️'
-            };
-            
-            // 设置Toast内容和样式
-            toast.className = `toast ${typeClass[type]}`;
-            toast.innerHTML = `${icon[type]} ${message}`;
-            
-            // 显示Toast
-            toast.classList.add('show');
-            
-            // 3秒后隐藏
-            setTimeout(() => {
-                toast.classList.remove('show');
-            }, 3000);
-        }
-
-        // 10. 日期快捷设置
-        function setQuickDate(type) {
-            const date = new Date();
-            if (type === 'yesterday') {
-                date.setDate(date.getDate() - 1);
-            }
-            const formattedDate = date.toISOString().split('T')[0];
-            document.getElementById('dateInput').value = formattedDate;
-        }
-
-        // 11. 备注快捷填充
-        function fillRemark(text) {
-            document.getElementById('remarkInput').value = text;
-        }
-
-        // 12. 重置表单
-        function resetForm() {
-            document.getElementById('amountInput').value = '';
-            document.getElementById('remarkInput').value = '';
-            // 保留记账人/类型/分类的记忆，仅清空金额和备注
-        }
-
-        // 13. 添加记账记录
+        // 添加记录
         function addRecord() {
-            // 获取表单数据
-            const user = document.getElementById('userSelect').value;
-            const type = document.getElementById('typeSelect').value;
-            const category = document.getElementById('categorySelect').value;
-            const amount = parseFloat(document.getElementById('amountInput').value);
-            const date = document.getElementById('dateInput').value;
-            const remark = document.getElementById('remarkInput').value.trim();
+            const user = document.getElementById('user').value;
+            const type = document.getElementById('type').value;
+            const category = document.getElementById('category').value;
+            const amount = parseFloat(document.getElementById('amount').value);
+            const date = document.getElementById('date').value;
+            const remark = document.getElementById('remark').value;
 
-            // 表单验证
-            if (!amount || isNaN(amount) || amount <= 0) {
-                showToast('请输入有效的金额（大于0）！', 'warning');
-                return;
-            }
-            if (!date) {
-                showToast('请选择记账日期！', 'warning');
+            if (!amount || amount <= 0) {
+                showToast('请输入有效的金额！');
                 return;
             }
 
-            // 创建新记录
-            const newRecord = {
+            const record = {
                 id: Date.now(),
-                user: user,
-                type: type,
-                category: category,
-                amount: amount,
-                date: date,
-                remark: remark
+                user,
+                type,
+                category,
+                amount,
+                date,
+                remark
             };
 
-            // 保存到本地存储
-            const records = getRecords();
-            records.push(newRecord);
-            saveRecords(records);
-
-            // 保存表单状态（记忆选择）
-            saveFormState();
-            // 重置表单
-            resetForm();
-
-            // 重新加载数据和统计
-            loadRecords();
-            filterRecords();
-            showToast('记账成功！', 'success');
+            records.push(record);
+            localStorage.setItem('familyRecords', JSON.stringify(records));
+            
+            renderRecords();
+            calculateStats();
+            clearForm();
+            showToast('添加成功！');
         }
 
-        // 14. 加载并渲染记账明细（空状态优化）
-        function loadRecords(filteredRecords = null) {
-            const records = filteredRecords || getRecords();
-            const recordsBody = document.getElementById('recordsBody');
-            recordsBody.innerHTML = '';
+        // 渲染记录列表
+        function renderRecords() {
+            const recordList = document.getElementById('recordList');
+            recordList.innerHTML = '';
 
-            // 空状态处理
             if (records.length === 0) {
-                recordsBody.innerHTML = `
-                    <tr>
-                        <td colspan="7">
-                            <div class="empty-state">
-                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                                    <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
-                                    <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0-7c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z"/>
-                                    <path d="M7 7h2v2H7zm0 4h2v2H7zm0 4h2v2H7zm6-8h2v2h-2zm0 4h2v2h-2zm0 4h2v2h-2zm6-8h2v2h-2zm0 4h2v2h-2z"/>
-                                </svg>
-                                <div class="empty-state-text">暂无记账记录</div>
-                                <div class="empty-state-tip">点击✨添加记账记录，开始你的记账之旅吧～</div>
-                            </div>
-                        </td>
-                    </tr>
-                `;
+                recordList.innerHTML = '<tr><td colspan="7" style="text-align: center;">暂无记录</td></tr>';
                 return;
             }
 
-            // 倒序显示
-            const reversedRecords = [...records].reverse();
-            reversedRecords.forEach(record => {
+            records.forEach(record => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
                     <td>${record.date}</td>
                     <td>${record.user}</td>
                     <td>${record.type}</td>
                     <td>${record.category}</td>
-                    <td class="amount-col">${record.amount.toFixed(2)}</td>
+                    <td>${record.amount.toFixed(2)}</td>
                     <td>${record.remark || '-'}</td>
-                    <td class="operate-btn">
-                        <span class="edit-btn" onclick="editRecord(${record.id})">修改</span>
-                        <span class="delete-btn" onclick="showDeleteModal(${record.id})">删除</span>
-                    </td>
+                    <td class="operate" onclick="deleteRecord(${record.id})">删除</td>
                 `;
-                recordsBody.appendChild(tr);
+                recordList.appendChild(tr);
             });
         }
 
-        // 15. 编辑记录 - 回填数据到表单
-        function editRecord(recordId) {
-            const records = getRecords();
-            const record = records.find(item => item.id === recordId);
-            if (!record) return;
+        // 计算统计数据
+        function calculateStats() {
+            let totalExpense = 0;
+            let totalIncome = 0;
 
-            // 回填数据到表单
-            document.getElementById('userSelect').value = record.user;
-            document.getElementById('typeSelect').value = record.type;
-            // 先更新分类选项，再选对应分类
-            changeCategoryOptions();
-            document.getElementById('categorySelect').value = record.category;
-            document.getElementById('amountInput').value = record.amount.toFixed(2);
-            document.getElementById('dateInput').value = record.date;
-            document.getElementById('remarkInput').value = record.remark || '';
-
-            // 存储当前修改的记录ID
-            document.getElementById('editRecordId').value = recordId;
-
-            // 切换按钮显示：隐藏添加，显示修改
-            document.getElementById('addRecordBtn').style.display = 'none';
-            document.getElementById('editRecordBtn').style.display = 'inline-block';
-        }
-
-        // 16. 保存修改后的记录
-        function saveEditRecord() {
-            const editId = parseInt(document.getElementById('editRecordId').value);
-            if (!editId) return;
-
-            // 获取修改后的表单数据
-            const user = document.getElementById('userSelect').value;
-            const type = document.getElementById('typeSelect').value;
-            const category = document.getElementById('categorySelect').value;
-            const amount = parseFloat(document.getElementById('amountInput').value);
-            const date = document.getElementById('dateInput').value;
-            const remark = document.getElementById('remarkInput').value.trim();
-
-            // 表单验证
-            if (!amount || isNaN(amount) || amount <= 0) {
-                showToast('请输入有效的金额（大于0）！', 'warning');
-                return;
-            }
-            if (!date) {
-                showToast('请选择记账日期！', 'warning');
-                return;
-            }
-
-            // 找到并更新记录
-            let records = getRecords();
-            records = records.map(item => {
-                if (item.id === editId) {
-                    return {
-                        ...item,
-                        user: user,
-                        type: type,
-                        category: category,
-                        amount: amount,
-                        date: date,
-                        remark: remark
-                    };
-                }
-                return item;
-            });
-
-            // 保存修改
-            saveRecords(records);
-            // 保存表单状态
-            saveFormState();
-
-            // 重置表单和按钮状态
-            resetForm();
-            document.getElementById('addRecordBtn').style.display = 'inline-block';
-            document.getElementById('editRecordBtn').style.display = 'none';
-
-            // 重新加载数据和统计
-            loadRecords();
-            filterRecords();
-            showToast('记录修改成功！', 'success');
-        }
-
-        // 17. 显示删除确认弹窗
-        function showDeleteModal(recordId) {
-            waitDeleteRecordId = recordId;
-            document.getElementById('deleteModal').classList.add('show');
-        }
-
-        // 18. 隐藏删除确认弹窗
-        function hideDeleteModal() {
-            waitDeleteRecordId = null;
-            document.getElementById('deleteModal').classList.remove('show');
-        }
-
-        // 19. 确认删除记录
-        function confirmDeleteRecord() {
-            if (!waitDeleteRecordId) return;
-
-            let records = getRecords();
-            records = records.filter(record => record.id !== waitDeleteRecordId);
-            saveRecords(records);
-            loadRecords();
-            filterRecords();
-            
-            // 隐藏弹窗并提示
-            hideDeleteModal();
-            showToast('记录已成功删除！', 'success');
-        }
-
-        // 20. 筛选并统计数据（新增按记账人筛选）
-        function filterRecords() {
-            const dimension = document.getElementById('viewDimension').value;
-            const userFilter = document.getElementById('userFilter').value;
-            const filterValue = currentSelectValue;
-            const records = getRecords();
-
-            // 筛选符合条件的记录
-            let filteredRecords = [];
-            if (dimension === 'day') {
-                // 按日筛选：精确匹配YYYY-MM-DD
-                filteredRecords = records.filter(record => record.date === filterValue);
-            } else if (dimension === 'month') {
-                // 按月筛选：匹配YYYY-MM开头
-                filteredRecords = records.filter(record => record.date.startsWith(filterValue));
-            } else if (dimension === 'year') {
-                // 按年筛选：匹配YYYY开头
-                filteredRecords = records.filter(record => record.date.startsWith(filterValue));
-            }
-
-            // 按记账人筛选
-            if (userFilter !== 'all') {
-                filteredRecords = filteredRecords.filter(record => record.user === userFilter);
-            }
-
-            // 基础统计
-            let husbandExpense = 0, wifeExpense = 0;
-            let husbandIncome = 0, wifeIncome = 0;
-            // 分类统计
-            const expenseCategoryTotal = {}, incomeCategoryTotal = {};
-            categoryData.支出.forEach(cat => expenseCategoryTotal[cat] = 0);
-            categoryData.收入.forEach(cat => incomeCategoryTotal[cat] = 0);
-
-            // 遍历计算
-            filteredRecords.forEach(record => {
-                const { user, type, category, amount } = record;
-                if (type === '支出') {
-                    if (user === '丈夫') husbandExpense += amount;
-                    else wifeExpense += amount;
-                    expenseCategoryTotal[category] += amount;
+            records.forEach(record => {
+                if (record.type === '支出') {
+                    totalExpense += record.amount;
                 } else {
-                    if (user === '丈夫') husbandIncome += amount;
-                    else wifeIncome += amount;
-                    incomeCategoryTotal[category] += amount;
+                    totalIncome += record.amount;
                 }
             });
 
-            // 计算汇总值
-            const totalExpense = husbandExpense + wifeExpense;
-            const totalIncome = husbandIncome + wifeIncome;
-            const totalBalance = totalIncome - totalExpense;
+            const balance = totalIncome - totalExpense;
 
-            // 更新统计显示
-            document.getElementById('husbandExpense').textContent = husbandExpense.toFixed(2);
-            document.getElementById('wifeExpense').textContent = wifeExpense.toFixed(2);
             document.getElementById('totalExpense').textContent = totalExpense.toFixed(2);
             document.getElementById('totalIncome').textContent = totalIncome.toFixed(2);
-            document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
-
-            // 更新分类明细统计（空状态优化）
-            renderCategoryStats('expense', expenseCategoryTotal);
-            renderCategoryStats('income', incomeCategoryTotal);
-
-            // 渲染筛选后的明细
-            loadRecords(filteredRecords);
+            document.getElementById('balance').textContent = balance.toFixed(2);
         }
 
-        // 21. 渲染分类明细统计（空状态优化）
-        function renderCategoryStats(type, categoryTotal) {
-            const gridId = type === 'expense' ? 'expenseCategoryGrid' : 'incomeCategoryGrid';
-            const grid = document.getElementById(gridId);
-            grid.innerHTML = '';
-
-            // 检查是否有数据
-            const hasData = Object.values(categoryTotal).some(amount => amount > 0);
-            if (!hasData) {
-                const emptySvg = type === 'expense' 
-                    ? `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
-                        <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z"/>
-                      </svg>`
-                    : `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
-                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
-                      </svg>`;
-                const emptyText = type === 'expense' ? '暂无支出数据' : '暂无收入数据';
-                grid.innerHTML = `
-                    <div class="empty-state" style="padding: 20px;">
-                        ${emptySvg}
-                        <div class="empty-state-text">${emptyText}</div>
-                    </div>
-                `;
-                return;
+        // 删除记录
+        function deleteRecord(id) {
+            if (confirm('确定要删除这条记录吗？')) {
+                records = records.filter(record => record.id !== id);
+                localStorage.setItem('familyRecords', JSON.stringify(records));
+                renderRecords();
+                calculateStats();
+                showToast('删除成功！');
             }
+        }
 
-            // 渲染有数据的分类
-            Object.entries(categoryTotal).forEach(([category, amount]) => {
-                if (amount <= 0) return;
-                const item = document.createElement('div');
-                item.className = 'category-item';
-                item.innerHTML = `
-                    <div class="name">${category}</div>
-                    <div class="${type === 'expense' ? 'expense' : 'income'} amount-col">${amount.toFixed(2)}</div>
-                `;
-                grid.appendChild(item);
-            });
+        // 清空表单
+        function clearForm() {
+            document.getElementById('amount').value = '';
+            document.getElementById('remark').value = '';
+        }
+
+        // 导出数据
+        function exportData() {
+            const blob = new Blob([JSON.stringify(records, null, 2)], { type: 'application/json' });
+            const a = document.createElement('a');
+            a.href = URL.createObjectURL(blob);
+            a.download = `家庭记账本_${new Date().toLocaleDateString().replace(/\//g, '-')}.json`;
+            a.click();
+            showToast('导出成功！');
+        }
+
+        // 提示框
+        function showToast(text) {
+            const toast = document.getElementById('toast');
+            toast.textContent = text;
+            toast.style.display = 'block';
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 2000);
         }
     </script>
 </body>
