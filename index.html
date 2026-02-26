@@ -97,8 +97,27 @@
         .form-group .edit-btn:hover {
             background: #6a8d6a;
         }
+        /* 备注快捷短语 */
+        .remark-tags {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .remark-tag {
+            padding: 5px 12px;
+            background: #f8f6f3;
+            border-radius: 6px;
+            font-size: 12px;
+            color: #5c5c59;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+        .remark-tag:hover {
+            background: #f0ece7;
+        }
 
-        /* 筛选区域 - 新增日历选择器样式 */
+        /* 筛选区域 - 日历选择器样式 */
         .filter-section {
             margin-bottom: 25px;
             padding: 15px;
@@ -237,7 +256,7 @@
         }
         .category-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
             gap: 10px;
         }
         .category-item {
@@ -275,6 +294,9 @@
             color: #5c5c59;
             font-weight: 500;
             font-size: 14px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         .records-section tr:hover {
             background: #faf9f7;
@@ -301,6 +323,10 @@
         }
         .delete-btn:hover {
             color: #b46056;
+        }
+        /* 金额列右对齐 */
+        .amount-col {
+            text-align: right !important;
         }
 
         /* 自定义删除确认弹窗 */
@@ -379,6 +405,64 @@
             background: #b46056;
         }
 
+        /* 空状态样式 */
+        .empty-state {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+            color: #8a8a86;
+            text-align: center;
+        }
+        .empty-state svg {
+            width: 120px;
+            height: 120px;
+            margin-bottom: 20px;
+            fill: #e9e6e1;
+        }
+        .empty-state-text {
+            font-size: 14px;
+            margin-bottom: 8px;
+        }
+        .empty-state-tip {
+            font-size: 12px;
+            color: #a0a09c;
+        }
+
+        /* 统一Toast提示样式 */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 14px;
+            color: white !important;
+            z-index: 99999;
+            opacity: 0;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            min-width: 200px;
+            justify-content: center;
+        }
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+        .toast.success {
+            background: #7a9d7a;
+        }
+        .toast.info {
+            background: #5c5c59;
+        }
+        .toast.warning {
+            background: #d49667;
+        }
+
         /* 响应式适配 */
         @media (max-width: 768px) {
             body {
@@ -407,6 +491,34 @@
             }
             .modal-box {
                 padding: 20px;
+            }
+            .empty-state svg {
+                width: 80px;
+                height: 80px;
+            }
+            /* 移动端操作按钮图标化 */
+            .operate-btn span {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+            }
+            .operate-btn span::before {
+                content: '';
+                display: inline-block;
+                width: 14px;
+                height: 14px;
+            }
+            .edit-btn::before {
+                content: '✏️';
+            }
+            .delete-btn::before {
+                content: '🗑️';
+            }
+            .operate-btn span {
+                font-size: 0;
+            }
+            .operate-btn span:hover {
+                font-size: 13px;
             }
         }
     </style>
@@ -444,10 +556,22 @@
             <div class="form-group">
                 <label>日期：</label>
                 <input type="date" id="dateInput">
+                <!-- 日期快捷按钮 -->
+                <div style="display: flex; gap: 8px; flex-shrink: 0;">
+                    <button type="button" style="padding: 8px 12px; font-size: 12px;" onclick="setQuickDate('today')">今日</button>
+                    <button type="button" style="padding: 8px 12px; font-size: 12px;" onclick="setQuickDate('yesterday')">昨日</button>
+                </div>
             </div>
             <div class="form-group">
                 <label>备注：</label>
                 <textarea id="remarkInput" placeholder="记录消费/收入原因（可选）"></textarea>
+                <!-- 备注快捷短语 -->
+                <div class="remark-tags">
+                    <div class="remark-tag" onclick="fillRemark('超市采购')">超市采购</div>
+                    <div class="remark-tag" onclick="fillRemark('外卖')">外卖</div>
+                    <div class="remark-tag" onclick="fillRemark('工资到账')">工资到账</div>
+                    <div class="remark-tag" onclick="fillRemark('其他')">其他</div>
+                </div>
             </div>
             <div class="form-group">
                 <button id="addRecordBtn">✨ 添加记账记录</button>
@@ -464,6 +588,13 @@
                 <option value="day">按日查看</option>
                 <option value="month">按月查看</option>
                 <option value="year">按年查看</option>
+            </select>
+            <!-- 按记账人筛选 -->
+            <label>记账人：</label>
+            <select id="userFilter" onchange="filterRecords()">
+                <option value="all">全部</option>
+                <option value="丈夫">丈夫</option>
+                <option value="妻子">妻子</option>
             </select>
             <!-- 日历选择器容器 -->
             <div class="calendar-picker" id="calendarPicker">
@@ -526,7 +657,7 @@
                         <th>记账人</th>
                         <th>收支类型</th>
                         <th>具体分类</th>
-                        <th>金额</th>
+                        <th class="amount-col">金额</th>
                         <th>备注</th>
                         <th>操作</th>
                     </tr>
@@ -552,6 +683,9 @@
         </div>
     </div>
 
+    <!-- Toast容器 -->
+    <div class="toast" id="globalToast"></div>
+
     <script>
         // 定义多级分类数据
         const categoryData = {
@@ -571,6 +705,8 @@
             
             // 初始化分类选项
             changeCategoryOptions();
+            // 加载表单记忆状态
+            loadFormState();
             // 初始化日历选择器
             renderCalendarPicker();
             // 加载本地数据
@@ -582,6 +718,11 @@
             document.getElementById('addRecordBtn').addEventListener('click', addRecord);
             document.getElementById('editRecordBtn').addEventListener('click', saveEditRecord);
             document.getElementById('filterBtn').addEventListener('click', filterRecords);
+            
+            // 金额输入框绑定失焦事件（自动保留两位小数）
+            document.getElementById('amountInput').addEventListener('blur', function() {
+                this.value = formatAmount(this.value);
+            });
         });
 
         // 1. 切换收支类型时，更新具体分类选项
@@ -598,6 +739,8 @@
                 option.textContent = category;
                 categorySelect.appendChild(option);
             });
+            // 切换类型后保存表单状态
+            saveFormState();
         }
 
         // 2. 渲染日历选择器（核心：日/月/年维度切换）
@@ -713,7 +856,90 @@
             localStorage.setItem('familyAccountRecords', JSON.stringify(records));
         }
 
-        // 6. 添加记账记录
+        // 6. 表单记忆状态 - 保存
+        function saveFormState() {
+            const formState = {
+                user: document.getElementById('userSelect').value,
+                type: document.getElementById('typeSelect').value,
+                category: document.getElementById('categorySelect').value
+            };
+            localStorage.setItem('familyAccountFormState', JSON.stringify(formState));
+        }
+
+        // 7. 表单记忆状态 - 加载
+        function loadFormState() {
+            const state = localStorage.getItem('familyAccountFormState');
+            if (state) {
+                const formState = JSON.parse(state);
+                document.getElementById('userSelect').value = formState.user || '丈夫';
+                document.getElementById('typeSelect').value = formState.type || '支出';
+                // 先更新分类选项，再设置分类
+                changeCategoryOptions();
+                document.getElementById('categorySelect').value = formState.category || categoryData[formState.type || '支出'][0];
+            }
+        }
+
+        // 8. 金额格式化 - 自动保留两位小数
+        function formatAmount(amount) {
+            if (!amount || isNaN(amount) || amount <= 0) {
+                return '';
+            }
+            // 保留两位小数
+            return parseFloat(amount).toFixed(2);
+        }
+
+        // 9. 统一Toast提示 - 核心优化
+        function showToast(message, type = 'info') {
+            const toast = document.getElementById('globalToast');
+            // 类型：success(成功)、info(提示)、warning(警告)
+            const typeClass = {
+                success: 'success',
+                info: 'info',
+                warning: 'warning'
+            };
+            // 图标
+            const icon = {
+                success: '✅',
+                info: '💡',
+                warning: '⚠️'
+            };
+            
+            // 设置Toast内容和样式
+            toast.className = `toast ${typeClass[type]}`;
+            toast.innerHTML = `${icon[type]} ${message}`;
+            
+            // 显示Toast
+            toast.classList.add('show');
+            
+            // 3秒后隐藏
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+
+        // 10. 日期快捷设置
+        function setQuickDate(type) {
+            const date = new Date();
+            if (type === 'yesterday') {
+                date.setDate(date.getDate() - 1);
+            }
+            const formattedDate = date.toISOString().split('T')[0];
+            document.getElementById('dateInput').value = formattedDate;
+        }
+
+        // 11. 备注快捷填充
+        function fillRemark(text) {
+            document.getElementById('remarkInput').value = text;
+        }
+
+        // 12. 重置表单
+        function resetForm() {
+            document.getElementById('amountInput').value = '';
+            document.getElementById('remarkInput').value = '';
+            // 保留记账人/类型/分类的记忆，仅清空金额和备注
+        }
+
+        // 13. 添加记账记录
         function addRecord() {
             // 获取表单数据
             const user = document.getElementById('userSelect').value;
@@ -725,11 +951,11 @@
 
             // 表单验证
             if (!amount || isNaN(amount) || amount <= 0) {
-                alert('💡 请输入有效的金额（大于0）！');
+                showToast('请输入有效的金额（大于0）！', 'warning');
                 return;
             }
             if (!date) {
-                alert('💡 请选择记账日期！');
+                showToast('请选择记账日期！', 'warning');
                 return;
             }
 
@@ -749,20 +975,42 @@
             records.push(newRecord);
             saveRecords(records);
 
+            // 保存表单状态（记忆选择）
+            saveFormState();
             // 重置表单
             resetForm();
 
             // 重新加载数据和统计
             loadRecords();
             filterRecords();
-            alert('🎉 记账成功！');
+            showToast('记账成功！', 'success');
         }
 
-        // 7. 加载并渲染记账明细
+        // 14. 加载并渲染记账明细（空状态优化）
         function loadRecords(filteredRecords = null) {
             const records = filteredRecords || getRecords();
             const recordsBody = document.getElementById('recordsBody');
             recordsBody.innerHTML = '';
+
+            // 空状态处理
+            if (records.length === 0) {
+                recordsBody.innerHTML = `
+                    <tr>
+                        <td colspan="7">
+                            <div class="empty-state">
+                                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/>
+                                    <path d="M12 17c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zm0-7c2.21 0 4 1.79 4 4s-1.79 4-4 4-4-1.79-4-4 1.79-4 4-4z"/>
+                                    <path d="M7 7h2v2H7zm0 4h2v2H7zm0 4h2v2H7zm6-8h2v2h-2zm0 4h2v2h-2zm0 4h2v2h-2zm6-8h2v2h-2zm0 4h2v2h-2z"/>
+                                </svg>
+                                <div class="empty-state-text">暂无记账记录</div>
+                                <div class="empty-state-tip">点击✨添加记账记录，开始你的记账之旅吧～</div>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
 
             // 倒序显示
             const reversedRecords = [...records].reverse();
@@ -773,7 +1021,7 @@
                     <td>${record.user}</td>
                     <td>${record.type}</td>
                     <td>${record.category}</td>
-                    <td>${record.amount.toFixed(2)}</td>
+                    <td class="amount-col">${record.amount.toFixed(2)}</td>
                     <td>${record.remark || '-'}</td>
                     <td class="operate-btn">
                         <span class="edit-btn" onclick="editRecord(${record.id})">修改</span>
@@ -784,7 +1032,7 @@
             });
         }
 
-        // 8. 编辑记录 - 回填数据到表单
+        // 15. 编辑记录 - 回填数据到表单
         function editRecord(recordId) {
             const records = getRecords();
             const record = records.find(item => item.id === recordId);
@@ -796,7 +1044,7 @@
             // 先更新分类选项，再选对应分类
             changeCategoryOptions();
             document.getElementById('categorySelect').value = record.category;
-            document.getElementById('amountInput').value = record.amount;
+            document.getElementById('amountInput').value = record.amount.toFixed(2);
             document.getElementById('dateInput').value = record.date;
             document.getElementById('remarkInput').value = record.remark || '';
 
@@ -808,7 +1056,7 @@
             document.getElementById('editRecordBtn').style.display = 'inline-block';
         }
 
-        // 9. 保存修改后的记录
+        // 16. 保存修改后的记录
         function saveEditRecord() {
             const editId = parseInt(document.getElementById('editRecordId').value);
             if (!editId) return;
@@ -823,11 +1071,11 @@
 
             // 表单验证
             if (!amount || isNaN(amount) || amount <= 0) {
-                alert('💡 请输入有效的金额（大于0）！');
+                showToast('请输入有效的金额（大于0）！', 'warning');
                 return;
             }
             if (!date) {
-                alert('💡 请选择记账日期！');
+                showToast('请选择记账日期！', 'warning');
                 return;
             }
 
@@ -850,6 +1098,8 @@
 
             // 保存修改
             saveRecords(records);
+            // 保存表单状态
+            saveFormState();
 
             // 重置表单和按钮状态
             resetForm();
@@ -859,22 +1109,22 @@
             // 重新加载数据和统计
             loadRecords();
             filterRecords();
-            alert('✏️ 记录修改成功！');
+            showToast('记录修改成功！', 'success');
         }
 
-        // 10. 显示删除确认弹窗
+        // 17. 显示删除确认弹窗
         function showDeleteModal(recordId) {
             waitDeleteRecordId = recordId;
             document.getElementById('deleteModal').classList.add('show');
         }
 
-        // 11. 隐藏删除确认弹窗
+        // 18. 隐藏删除确认弹窗
         function hideDeleteModal() {
             waitDeleteRecordId = null;
             document.getElementById('deleteModal').classList.remove('show');
         }
 
-        // 12. 确认删除记录
+        // 19. 确认删除记录
         function confirmDeleteRecord() {
             if (!waitDeleteRecordId) return;
 
@@ -886,48 +1136,13 @@
             
             // 隐藏弹窗并提示
             hideDeleteModal();
-            // 自定义提示（替代alert）
-            showToast('🗑️ 记录已成功删除！');
+            showToast('记录已成功删除！', 'success');
         }
 
-        // 13. 自定义提示Toast（优化体验）
-        function showToast(message) {
-            // 创建toast元素
-            const toast = document.createElement('div');
-            toast.style.position = 'fixed';
-            toast.style.bottom = '30px';
-            toast.style.left = '50%';
-            toast.style.transform = 'translateX(-50%)';
-            toast.style.padding = '12px 20px';
-            toast.style.background = 'rgba(74, 74, 72, 0.8)';
-            toast.style.color = 'white !important';
-            toast.style.borderRadius = '8px';
-            toast.style.fontSize = '14px';
-            toast.style.zIndex = '9999';
-            toast.style.opacity = '0';
-            toast.style.transition = 'opacity 0.3s ease';
-            toast.textContent = message;
-            
-            // 添加到页面
-            document.body.appendChild(toast);
-            
-            // 显示toast
-            setTimeout(() => {
-                toast.style.opacity = '1';
-            }, 100);
-            
-            // 3秒后移除
-            setTimeout(() => {
-                toast.style.opacity = '0';
-                setTimeout(() => {
-                    document.body.removeChild(toast);
-                }, 300);
-            }, 3000);
-        }
-
-        // 14. 筛选并统计数据
+        // 20. 筛选并统计数据（新增按记账人筛选）
         function filterRecords() {
             const dimension = document.getElementById('viewDimension').value;
+            const userFilter = document.getElementById('userFilter').value;
             const filterValue = currentSelectValue;
             const records = getRecords();
 
@@ -942,6 +1157,11 @@
             } else if (dimension === 'year') {
                 // 按年筛选：匹配YYYY开头
                 filteredRecords = records.filter(record => record.date.startsWith(filterValue));
+            }
+
+            // 按记账人筛选
+            if (userFilter !== 'all') {
+                filteredRecords = filteredRecords.filter(record => record.user === userFilter);
             }
 
             // 基础统计
@@ -978,7 +1198,7 @@
             document.getElementById('totalIncome').textContent = totalIncome.toFixed(2);
             document.getElementById('totalBalance').textContent = totalBalance.toFixed(2);
 
-            // 更新分类明细统计
+            // 更新分类明细统计（空状态优化）
             renderCategoryStats('expense', expenseCategoryTotal);
             renderCategoryStats('income', incomeCategoryTotal);
 
@@ -986,38 +1206,43 @@
             loadRecords(filteredRecords);
         }
 
-        // 15. 渲染分类明细统计
+        // 21. 渲染分类明细统计（空状态优化）
         function renderCategoryStats(type, categoryTotal) {
             const gridId = type === 'expense' ? 'expenseCategoryGrid' : 'incomeCategoryGrid';
             const grid = document.getElementById(gridId);
             grid.innerHTML = '';
 
+            // 检查是否有数据
+            const hasData = Object.values(categoryTotal).some(amount => amount > 0);
+            if (!hasData) {
+                const emptySvg = type === 'expense' 
+                    ? `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+                        <path d="M11 9h2V6h3V4h-3V1h-2v3H8v2h3v3zm-4 9c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zm10 0c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2zm-9.83-3.25l.03-.12.9-1.63h7.45c.75 0 1.41-.41 1.75-1.03l3.86-7.01L19.42 4h-.01l-1.1 2-2.76 5H8.53l-.13-.27L6.16 6l-.95-2-.94-2H1v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96 0 1.1.9 2 2 2h12v-2H7.42c-.13 0-.25-.11-.25-.25z"/>
+                      </svg>`
+                    : `<svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="80" height="80">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-13h2v6h-2zm0 8h2v2h-2z"/>
+                      </svg>`;
+                const emptyText = type === 'expense' ? '暂无支出数据' : '暂无收入数据';
+                grid.innerHTML = `
+                    <div class="empty-state" style="padding: 20px;">
+                        ${emptySvg}
+                        <div class="empty-state-text">${emptyText}</div>
+                    </div>
+                `;
+                return;
+            }
+
+            // 渲染有数据的分类
             Object.entries(categoryTotal).forEach(([category, amount]) => {
                 if (amount <= 0) return;
                 const item = document.createElement('div');
                 item.className = 'category-item';
                 item.innerHTML = `
                     <div class="name">${category}</div>
-                    <div class="value ${type === 'expense' ? 'expense' : 'income'}">${amount.toFixed(2)}</div>
+                    <div class="${type === 'expense' ? 'expense' : 'income'} amount-col">${amount.toFixed(2)}</div>
                 `;
                 grid.appendChild(item);
             });
-
-            if (grid.children.length === 0) {
-                grid.innerHTML = `<div class="category-item">暂无${type === 'expense' ? '支出' : '收入'}数据</div>`;
-            }
-        }
-
-        // 16. 重置表单
-        function resetForm() {
-            const today = new Date().toISOString().split('T')[0];
-            document.getElementById('userSelect').value = '丈夫';
-            document.getElementById('typeSelect').value = '支出';
-            changeCategoryOptions();
-            document.getElementById('amountInput').value = '';
-            document.getElementById('dateInput').value = today;
-            document.getElementById('remarkInput').value = '';
-            document.getElementById('editRecordId').value = '';
         }
     </script>
 </body>
