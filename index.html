@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>温馨家庭记账本（全功能完整版）</title>
+    <title>温馨家庭记账本（级联时间筛选版）</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* 全局样式 - 高级质感风格 */
@@ -246,64 +246,129 @@
             background: #f0ece7;
         }
 
-        /* 筛选区域 */
+        /* 筛选区域 - 级联时间选择新版 */
         .filter-section {
             margin-bottom: 25px;
             padding: 15px;
             background: #ffffff;
             border-radius: 10px;
             box-shadow: 0 4px 12px rgba(150, 140, 130, 0.04);
+            border: 1px solid #e9e6e1;
+        }
+        .filter-top-row {
             display: flex;
             gap: 15px;
             flex-wrap: wrap;
-            align-items: flex-start;
-            border: 1px solid #e9e6e1;
+            align-items: center;
+            margin-bottom: 15px;
         }
-        .filter-section label {
+        .filter-top-row label {
             font-weight: 500;
             color: #5c5c59;
             flex-shrink: 0;
-            margin-top: 5px;
         }
-        .filter-section select {
-            padding: 10px 12px;
-            border: 1px solid #e9e6e1;
-            border-radius: 8px;
-            flex-shrink: 0;
-            min-width: 120px;
-            transition: border 0.3s ease;
-        }
-        .filter-section select:focus {
-            border-color: #c87065;
-            outline: none;
-        }
-        /* 日历切换按钮 */
-        .calendar-nav {
+        /* 选中时间展示区 */
+        .selected-time-show {
             display: flex;
-            gap: 8px;
-            margin-top: 5px;
-            flex-shrink: 0;
+            align-items: center;
+            gap: 10px;
+            flex: 1;
         }
-        .calendar-nav-btn {
-            padding: 8px 12px;
+        .selected-time-text {
+            font-size: 16px;
+            font-weight: 500;
+            color: #c87065;
+        }
+        .reselect-btn {
+            padding: 8px 15px;
+            background: #f8f6f3;
             border: 1px solid #e9e6e1;
             border-radius: 6px;
-            background: #f8f6f3;
             cursor: pointer;
-            font-size: 12px;
+            font-size: 13px;
             transition: all 0.2s ease;
         }
-        .calendar-nav-btn:hover {
+        .reselect-btn:hover {
             background: #f0ece7;
             border-color: #d9d6d0;
+        }
+        /* 级联选择面板 */
+        .cascade-select-panel {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            padding: 15px;
+            background: #f8f6f3;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            border: 1px solid #e9e6e1;
+        }
+        .cascade-select-panel.hide {
+            display: none;
+        }
+        .cascade-item {
+            flex: 1;
+            min-width: 180px;
+        }
+        .cascade-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: #5c5c59;
+            margin-bottom: 10px;
+        }
+        .cascade-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            gap: 8px;
+            max-height: 200px;
+            overflow-y: auto;
+            padding: 5px;
+            background: #ffffff;
+            border-radius: 6px;
+            border: 1px solid #e9e6e1;
+        }
+        .cascade-option {
+            padding: 8px 0;
+            text-align: center;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 14px;
+            border: 1px solid transparent;
+        }
+        .cascade-option:hover {
+            background: #f0ece7;
+            border-color: #d9d6d0;
+        }
+        .cascade-option.active {
+            background: #c87065;
+            color: white !important;
+            border-color: #c87065;
+        }
+        .cascade-option.disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            background: transparent;
+        }
+        /* 筛选操作栏 */
+        .filter-bottom-row {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .filter-left-group {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: center;
         }
         /* 多选记账人容器 */
         .user-multi-filter {
             display: flex;
             flex-wrap: wrap;
             gap: 8px;
-            margin-top: 5px;
-            flex-shrink: 0;
         }
         .user-checkbox-item {
             display: flex;
@@ -317,38 +382,10 @@
             height: 16px;
             accent-color: #c87065;
         }
-        /* 日历选择器容器 */
-        .calendar-picker {
-            flex: 1;
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
-            gap: 8px;
-            margin-top: 5px;
-        }
-        .calendar-btn {
-            padding: 10px 0;
-            border: 1px solid #e9e6e1;
-            border-radius: 8px;
-            background: #f8f6f3;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            font-size: 14px;
-        }
-        .calendar-btn:hover {
-            background: #f0ece7;
-            border-color: #d9d6d0;
-        }
-        .calendar-btn.active {
-            background: #c87065;
-            color: white !important;
-            border-color: #c87065;
-        }
         /* 数据导出/导入按钮 */
         .data-op-btn {
             display: flex;
             gap: 10px;
-            margin-top: 5px;
             flex-shrink: 0;
         }
         .data-btn {
@@ -376,19 +413,23 @@
         #importFile {
             display: none;
         }
-        .filter-section .query-btn {
+        .confirm-select-btn {
             background: #c87065;
             color: white !important;
             border: none;
-            padding: 10px 20px;
+            padding: 10px 25px;
             border-radius: 8px;
             cursor: pointer;
             transition: background 0.3s ease;
             flex-shrink: 0;
-            margin-top: 5px;
         }
-        .filter-section .query-btn:hover {
+        .confirm-select-btn:hover {
             background: #b46056;
+        }
+        .confirm-select-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #c87065;
         }
 
         /* 统计区域 */
@@ -797,8 +838,12 @@
                 gap: 5px;
                 align-items: flex-start;
             }
-            .calendar-picker {
-                grid-template-columns: repeat(auto-fill, minmax(50px, 1fr));
+            .cascade-select-panel {
+                flex-direction: column;
+                gap: 15px;
+            }
+            .cascade-item {
+                min-width: 100%;
             }
             .modal-box {
                 padding: 20px;
@@ -838,7 +883,7 @@
     <div class="settings-btn" onclick="showSettingsPanel()">⚙️</div>
     
     <div class="container">
-        <h1>🏡 温馨家庭记账本（全功能完整版）</h1>
+        <h1>🏡 温馨家庭记账本（级联时间筛选版）</h1>
         
         <!-- 记账录入区域 -->
         <div class="input-section">
@@ -890,45 +935,59 @@
             </div>
         </div>
 
-        <!-- 筛选区域 - 增强版 -->
+        <!-- 筛选区域 - 级联时间选择新版 -->
         <div class="filter-section">
-            <label>查看维度：</label>
-            <select id="viewDimension" onchange="renderCalendarPicker()">
-                <option value="day">按日查看</option>
-                <option value="month">按月查看</option>
-                <option value="year">按年查看</option>
-            </select>
-            
-            <!-- 日历切换按钮 -->
-            <div class="calendar-nav">
-                <button class="calendar-nav-btn" onclick="navigateCalendar('prev')">◀ 上一期</button>
-                <button class="calendar-nav-btn" onclick="navigateCalendar('next')">下一期 ▶</button>
+            <!-- 顶部选中时间展示 -->
+            <div class="filter-top-row">
+                <label>账单时间：</label>
+                <div class="selected-time-show">
+                    <div class="selected-time-text" id="selectedTimeText">请选择年/月/日查看账单</div>
+                    <button class="reselect-btn" id="reselectBtn" onclick="showCascadePanel()">重新选择</button>
+                </div>
             </div>
-            
-            <!-- 多选记账人筛选 -->
-            <label>记账人：</label>
-            <div class="user-multi-filter" id="userMultiFilter">
-                <!-- 动态生成记账人复选框 -->
+
+            <!-- 级联选择面板 -->
+            <div class="cascade-select-panel" id="cascadeSelectPanel">
+                <div class="cascade-item">
+                    <div class="cascade-title">第一步：选择年份</div>
+                    <div class="cascade-options" id="yearOptions">
+                        <!-- 动态生成年份选项 -->
+                    </div>
+                </div>
+                <div class="cascade-item">
+                    <div class="cascade-title">第二步：选择月份</div>
+                    <div class="cascade-options" id="monthOptions">
+                        <!-- 动态生成月份选项 -->
+                    </div>
+                </div>
+                <div class="cascade-item">
+                    <div class="cascade-title">第三步：选择日期</div>
+                    <div class="cascade-options" id="dayOptions">
+                        <!-- 动态生成日期选项 -->
+                    </div>
+                </div>
             </div>
-            
-            <!-- 日历选择器容器 -->
-            <div class="calendar-picker" id="calendarPicker">
-                <!-- 动态生成日期/月份/年份按钮 -->
+
+            <!-- 底部操作栏 -->
+            <div class="filter-bottom-row">
+                <div class="filter-left-group">
+                    <label>记账人：</label>
+                    <div class="user-multi-filter" id="userMultiFilter">
+                        <!-- 动态生成记账人复选框 -->
+                    </div>
+                    <button class="confirm-select-btn" id="confirmSelectBtn" onclick="confirmTimeSelect()" disabled>确认选择</button>
+                </div>
+                <div class="data-op-btn">
+                    <button class="data-btn export-btn" onclick="exportData()">📤 导出数据</button>
+                    <button class="data-btn import-btn" onclick="document.getElementById('importFile').click()">📥 导入数据</button>
+                    <input type="file" id="importFile" accept=".json" onchange="importData(event)">
+                </div>
             </div>
-            
-            <!-- 数据导出/导入按钮 -->
-            <div class="data-op-btn">
-                <button class="data-btn export-btn" onclick="exportData()">📤 导出数据</button>
-                <button class="data-btn import-btn" onclick="document.getElementById('importFile').click()">📥 导入数据</button>
-                <input type="file" id="importFile" accept=".json" onchange="importData(event)">
-            </div>
-            
-            <button class="query-btn" id="filterBtn">🔍 查询</button>
         </div>
 
-        <!-- 统计区域 - 增强版 -->
+        <!-- 统计区域 -->
         <div class="stats-section">
-            <div class="stats-title" id="statsTitle">当日统计（默认今日）</div>
+            <div class="stats-title" id="statsTitle">账单统计</div>
             
             <!-- 预算模块 -->
             <div class="budget-section" id="budgetSection">
@@ -995,7 +1054,7 @@
             </div>
         </div>
 
-        <!-- 记账明细区域 - 增强版 -->
+        <!-- 记账明细区域 -->
         <div class="records-section">
             <!-- 批量操作栏 -->
             <div class="batch-operate">
@@ -1010,7 +1069,7 @@
             <table>
                 <thead>
                     <tr>
-                        <th class="checkbox-col">#</th> <!-- 复选框列 -->
+                        <th class="checkbox-col">#</th>
                         <th>日期</th>
                         <th>记账人</th>
                         <th>收支类型</th>
@@ -1114,9 +1173,13 @@
             },
             budgets: [] // { month: '2024-05', category: '餐饮', amount: 2000 }
         };
-        let currentSelectValue = '';
+        // 级联选择状态管理
+        let cascadeState = {
+            selectedYear: '',
+            selectedMonth: '',
+            selectedDay: ''
+        };
         let waitDeleteRecordId = null;
-        let currentCalendarDate = new Date(); 
         let selectedRecordIds = [];
         let trendChartInstance = null;
         let pieChartInstance = null;
@@ -1138,10 +1201,9 @@
             initUserMultiFilter();
             changeCategoryOptions();
             loadFormState();
-            renderCalendarPicker();
+            initCascadeOptions(); // 初始化级联选项
             initCustomSettingsPanel();
             loadRecords();
-            filterRecords();
             initCharts();
             bindEvents();
         });
@@ -1250,96 +1312,164 @@
             saveFormState();
         }
 
-        // ========== 日历增强功能 ==========
-        function renderCalendarPicker() {
-            const dimension = document.getElementById('viewDimension').value;
-            const calendarPicker = document.getElementById('calendarPicker');
-            calendarPicker.innerHTML = '';
-            const date = currentCalendarDate;
-            
-            const statsTitle = document.getElementById('statsTitle');
-            let year = date.getFullYear();
-            let month = date.getMonth();
-            
-            if (dimension === 'day') {
-                const firstDay = new Date(year, month, 1);
-                const lastDay = new Date(year, month + 1, 0);
-                const totalDays = lastDay.getDate();
-                
-                currentSelectValue = `${year}-${String(month + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-                
-                for (let i = 1; i <= totalDays; i++) {
-                    const dayStr = String(i).padStart(2, '0');
-                    const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${dayStr}`;
-                    const btn = createCalendarBtn(dayStr, dateStr, dateStr === currentSelectValue);
-                    calendarPicker.appendChild(btn);
-                }
-                statsTitle.textContent = `📅 当日统计（${currentSelectValue}）`;
-            } else if (dimension === 'month') {
-                const months = ['01', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
-                currentSelectValue = `${year}-${String(month + 1).padStart(2, '0')}`;
-                
-                months.forEach(monthStr => {
-                    const monthName = `${monthStr}月`;
-                    const monthValue = `${year}-${monthStr}`;
-                    const btn = createCalendarBtn(monthName, monthValue, monthValue === currentSelectValue);
-                    calendarPicker.appendChild(btn);
-                });
-                statsTitle.textContent = `📆 当月统计（${currentSelectValue}）`;
-            } else if (dimension === 'year') {
-                const years = [];
-                for (let i = year; i >= year - 4; i--) {
-                    years.push(i);
-                }
-                currentSelectValue = `${year}`;
-                
-                years.forEach(y => {
-                    const yearStr = `${y}`;
-                    const btn = createCalendarBtn(yearStr + '年', yearStr, yearStr === currentSelectValue);
-                    calendarPicker.appendChild(btn);
-                });
-                statsTitle.textContent = `📈 当年统计（${currentSelectValue}）`;
-            }
+        // ========== 级联时间选择核心逻辑 ==========
+        // 初始化级联选项
+        function initCascadeOptions() {
+            renderYearOptions();
+            renderMonthOptions();
+            renderDayOptions();
+            updateConfirmBtnState();
         }
 
-        function createCalendarBtn(text, value, isActive) {
-            const btn = document.createElement('div');
-            btn.className = `calendar-btn ${isActive ? 'active' : ''}`;
-            btn.textContent = text;
-            btn.dataset.value = value;
+        // 渲染年份选项
+        function renderYearOptions() {
+            const yearOptions = document.getElementById('yearOptions');
+            const records = getRecords();
+            const currentYear = new Date().getFullYear();
             
-            btn.addEventListener('click', function() {
-                document.querySelectorAll('.calendar-btn').forEach(item => item.classList.remove('active'));
-                this.classList.add('active');
-                currentSelectValue = this.dataset.value;
-                
-                const dimension = document.getElementById('viewDimension').value;
-                const statsTitle = document.getElementById('statsTitle');
-                if (dimension === 'day') statsTitle.textContent = `📅 当日统计（${currentSelectValue}）`;
-                else if (dimension === 'month') statsTitle.textContent = `📆 当月统计（${currentSelectValue}）`;
-                else statsTitle.textContent = `📈 当年统计（${currentSelectValue}）`;
-                
-                filterRecords();
+            // 提取所有记录中的年份，加上当前年，去重排序
+            let yearList = [currentYear];
+            records.forEach(record => {
+                const year = record.date.split('-')[0];
+                if (!yearList.includes(parseInt(year))) {
+                    yearList.push(parseInt(year));
+                }
             });
-            
-            return btn;
+            yearList = yearList.sort((a, b) => b - a); // 降序排列
+
+            // 生成年份选项
+            yearOptions.innerHTML = '';
+            yearList.forEach(year => {
+                const option = document.createElement('div');
+                option.className = `cascade-option ${cascadeState.selectedYear == year ? 'active' : ''}`;
+                option.textContent = `${year}年`;
+                option.dataset.year = year;
+                
+                option.addEventListener('click', function() {
+                    // 更新选中年份
+                    cascadeState.selectedYear = this.dataset.year;
+                    // 重置月、日选择
+                    cascadeState.selectedMonth = '';
+                    cascadeState.selectedDay = '';
+                    // 重新渲染
+                    renderYearOptions();
+                    renderMonthOptions();
+                    renderDayOptions();
+                    updateConfirmBtnState();
+                });
+                
+                yearOptions.appendChild(option);
+            });
         }
 
-        function navigateCalendar(direction) {
-            const dimension = document.getElementById('viewDimension').value;
-            const date = new Date(currentCalendarDate);
-            
-            if (dimension === 'day') {
-                date.setDate(direction === 'prev' ? date.getDate() - 1 : date.getDate() + 1);
-            } else if (dimension === 'month') {
-                date.setMonth(direction === 'prev' ? date.getMonth() - 1 : date.getMonth() + 1);
-            } else {
-                date.setFullYear(direction === 'prev' ? date.getFullYear() - 1 : date.getFullYear() + 1);
+        // 渲染月份选项
+        function renderMonthOptions() {
+            const monthOptions = document.getElementById('monthOptions');
+            monthOptions.innerHTML = '';
+
+            // 未选年份，月份全部禁用
+            if (!cascadeState.selectedYear) {
+                for (let i = 1; i <= 12; i++) {
+                    const monthStr = String(i).padStart(2, '0');
+                    const option = document.createElement('div');
+                    option.className = 'cascade-option disabled';
+                    option.textContent = `${monthStr}月`;
+                    monthOptions.appendChild(option);
+                }
+                return;
             }
+
+            // 已选年份，生成12个月选项
+            for (let i = 1; i <= 12; i++) {
+                const monthStr = String(i).padStart(2, '0');
+                const option = document.createElement('div');
+                option.className = `cascade-option ${cascadeState.selectedMonth == monthStr ? 'active' : ''}`;
+                option.textContent = `${monthStr}月`;
+                option.dataset.month = monthStr;
+                
+                option.addEventListener('click', function() {
+                    // 更新选中月份
+                    cascadeState.selectedMonth = this.dataset.month;
+                    // 重置日选择
+                    cascadeState.selectedDay = '';
+                    // 重新渲染
+                    renderMonthOptions();
+                    renderDayOptions();
+                    updateConfirmBtnState();
+                });
+                
+                monthOptions.appendChild(option);
+            }
+        }
+
+        // 渲染日期选项
+        function renderDayOptions() {
+            const dayOptions = document.getElementById('dayOptions');
+            dayOptions.innerHTML = '';
+
+            // 未选年/月，日期全部禁用
+            if (!cascadeState.selectedYear || !cascadeState.selectedMonth) {
+                for (let i = 1; i <= 31; i++) {
+                    const dayStr = String(i).padStart(2, '0');
+                    const option = document.createElement('div');
+                    option.className = 'cascade-option disabled';
+                    option.textContent = `${dayStr}日`;
+                    dayOptions.appendChild(option);
+                }
+                return;
+            }
+
+            // 计算选中年月的总天数
+            const daysInMonth = new Date(cascadeState.selectedYear, cascadeState.selectedMonth, 0).getDate();
             
-            currentCalendarDate = date;
-            renderCalendarPicker();
+            // 生成日期选项
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dayStr = String(i).padStart(2, '0');
+                const option = document.createElement('div');
+                option.className = `cascade-option ${cascadeState.selectedDay == dayStr ? 'active' : ''}`;
+                option.textContent = `${dayStr}日`;
+                option.dataset.day = dayStr;
+                
+                option.addEventListener('click', function() {
+                    // 更新选中日期
+                    cascadeState.selectedDay = this.dataset.day;
+                    // 重新渲染
+                    renderDayOptions();
+                    updateConfirmBtnState();
+                });
+                
+                dayOptions.appendChild(option);
+            }
+        }
+
+        // 更新确认按钮状态
+        function updateConfirmBtnState() {
+            const confirmBtn = document.getElementById('confirmSelectBtn');
+            // 必须选完年、月、日才能确认
+            const canConfirm = cascadeState.selectedYear && cascadeState.selectedMonth && cascadeState.selectedDay;
+            confirmBtn.disabled = !canConfirm;
+        }
+
+        // 展示级联选择面板
+        function showCascadePanel() {
+            document.getElementById('cascadeSelectPanel').classList.remove('hide');
+        }
+
+        // 确认时间选择
+        function confirmTimeSelect() {
+            const { selectedYear, selectedMonth, selectedDay } = cascadeState;
+            const fullDate = `${selectedYear}-${selectedMonth}-${selectedDay}`;
+            
+            // 更新展示文本
+            document.getElementById('selectedTimeText').textContent = fullDate;
+            document.getElementById('statsTitle').textContent = `📅 ${fullDate} 账单统计`;
+            
+            // 隐藏级联选择面板
+            document.getElementById('cascadeSelectPanel').classList.add('hide');
+            
+            // 执行筛选
             filterRecords();
+            showToast('时间选择成功！', 'success');
         }
 
         // ========== 数据CRUD ==========
@@ -1350,6 +1480,8 @@
 
         function saveRecords(records) {
             localStorage.setItem('familyAccountRecords', JSON.stringify(records));
+            // 新增/修改记录后，更新级联年份选项
+            initCascadeOptions();
         }
 
         function loadRecords() {
@@ -1360,24 +1492,31 @@
 
         function filterRecords() {
             const records = getRecords();
-            const dimension = document.getElementById('viewDimension').value;
+            const { selectedYear, selectedMonth, selectedDay } = cascadeState;
             const selectedUsers = Array.from(document.querySelectorAll('.user-multi-filter input:checked')).map(input => input.value);
             
+            // 基础筛选：记账人
             let filtered = records.filter(record => selectedUsers.includes(record.user));
             
-            if (dimension === 'day') {
-                filtered = filtered.filter(record => record.date === currentSelectValue);
-            } else if (dimension === 'month') {
-                filtered = filtered.filter(record => record.date.startsWith(currentSelectValue));
-            } else if (dimension === 'year') {
-                filtered = filtered.filter(record => record.date.startsWith(currentSelectValue));
+            // 时间筛选：按选中的年/月/日
+            if (selectedYear && selectedMonth && selectedDay) {
+                const fullDate = `${selectedYear}-${selectedMonth}-${selectedDay}`;
+                filtered = filtered.filter(record => record.date === fullDate);
+            }            // 只选了年和月，按月筛选
+            else if (selectedYear && selectedMonth) {
+                const monthPrefix = `${selectedYear}-${selectedMonth}`;
+                filtered = filtered.filter(record => record.date.startsWith(monthPrefix));
+            }
+            // 只选了年，按年筛选
+            else if (selectedYear) {
+                filtered = filtered.filter(record => record.date.startsWith(selectedYear));
             }
             
             renderRecords(filtered);
             calculateStats(filtered);
             renderCategoryStats(filtered);
             renderBudgetStats();
-            updateCharts(filtered);
+            updateCharts(filtered, selectedYear, selectedMonth, selectedDay);
             updateSelectedCount();
         }
 
@@ -1656,6 +1795,7 @@
                     loadRecords();
                     filterRecords();
                     initCustomSettingsPanel();
+                    initCascadeOptions(); // 重新初始化级联选项
                     
                     showToast('数据导入成功！', 'success');
                 } catch (err) {
@@ -1721,8 +1861,7 @@
             div.innerHTML = `
                 <input type="text" placeholder="${type === 'expense' ? '请输入支出分类' : '请输入收入分类'}">
                 <div class="custom-item-btn">
-                    <button class="custom
-                    -btn" style="background: #c87065;" onclick="deleteCustomItem(this)">✕</button>
+                    <button class="custom-btn" style="background: #c87065;" onclick="deleteCustomItem(this)">✕</button>
                 </div>
             `;
             container.appendChild(div);
@@ -2003,23 +2142,29 @@
             });
         }
 
-        function updateCharts(records) {
-            const dimension = document.getElementById('viewDimension').value;
-            
-            // 更新趋势图
-            updateTrendChart(records, dimension);
+        function updateCharts(records, selectedYear, selectedMonth, selectedDay) {
+            // 更新趋势图（根据选择的维度调整）
+            updateTrendChart(records, selectedYear, selectedMonth, selectedDay);
             // 更新饼图
             updatePieChart(records);
         }
 
-        function updateTrendChart(records, dimension) {
-            // 按维度分组（日/月/年）
+        function updateTrendChart(records, selectedYear, selectedMonth, selectedDay) {
+            // 根据选择的时间维度确定分组方式
             const groupMap = {};
+            
+            // 确定分组维度
+            let groupBy = 'year';
+            if (selectedYear && selectedMonth && selectedDay) groupBy = 'day';
+            else if (selectedYear && selectedMonth) groupBy = 'month';
+            else if (selectedYear) groupBy = 'year';
+            
+            // 按维度分组
             records.forEach(record => {
                 let key = '';
-                if (dimension === 'day') key = record.date; // 按日
-                else if (dimension === 'month') key = record.date.split('-').slice(0, 2).join('-'); // 按月
-                else key = record.date.split('-')[0]; // 按年
+                if (groupBy === 'day') key = record.date;
+                else if (groupBy === 'month') key = record.date.split('-').slice(0, 2).join('-');
+                else key = record.date.split('-')[0];
                 
                 if (!groupMap[key]) groupMap[key] = { expense: 0, income: 0 };
                 if (record.type === '支出') groupMap[key].expense += record.amount;
@@ -2079,8 +2224,6 @@
             document.getElementById('addRecordBtn').addEventListener('click', addRecord);
             // 保存修改按钮
             document.getElementById('editRecordBtn').addEventListener('click', saveEditRecord);
-            // 筛选按钮
-            document.getElementById('filterBtn').addEventListener('click', filterRecords);
             // 监听表单输入，保存状态
             ['userSelect', 'typeSelect', 'categorySelect', 'amountInput', 'dateInput', 'remarkInput'].forEach(id => {
                 document.getElementById(id).addEventListener('input', saveFormState);
